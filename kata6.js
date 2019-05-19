@@ -4,7 +4,7 @@
 
 function addBinary(a,b) {
   var sumBinary = a + b;
-  
+  return sumBinary.toString(2);
 }
 
 
