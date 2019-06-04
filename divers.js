@@ -111,18 +111,67 @@
 // }
 
 //count frequency
-function getFrequency(string) {
-    var freq = {};
-    for (var i=0; i<string.length;i++) {
-        var character = string.charAt(i);
-        if (freq[character]) {
-           freq[character]++;
-        } else {
-           freq[character] = 1;
-        }
-    }
+// function getFrequency(string) {
+//     var freq = {};
+//     var character;
+//     for (var i=0; i<string.length;i++) {
+//         typeof string === "string" ? character = string.charAt(i) : character = string[i];
+//         if (freq[character]) {
+//            freq[character]++;
+//         } else {
+//            freq[character] = 1;
+//         }
+//     }
+//
+//     return freq;
+// };
+//
+// function count (string) {
+//   var count = {};
+//   var character;
+//   typeof string === "string" ? character = string.split('') : character = string;
+//   character.forEach(function(s) {
+//      count[s] ? count[s]++ : count[s] = 1;
+//   });
+//   return count;
+// }
+//
+// var testarray = [1, 2, 2, 3, 2, 3, 2];
+// var teststring = "hello";
 
-    return freq;
-};
+//first 100 primes
 
-console.log(getFrequency("hello"));
+// function findPrimes(nPrimes) {
+//     var primes = [];
+//     var n = 2;
+//     while (primes.length < nPrimes){
+//         if (isPrime(n)) {
+//             primes.push(n);
+//         }
+//         n++;
+//     }
+//     return primes;
+// }
+//
+// function isPrime(n) {
+//
+//     for( var i = 2;  i <= Math.sqrt(n);  i++ ) {
+//         if( n % i === 0 )
+//             return false;
+//     }
+//     return true;
+// }
+//
+// console.log(findPrimes(100));
+
+//First of Fibonacci
+function fib(n) {
+
+  const result = [0, 1];
+  for (var i = 2; i < n; i++) {
+    result.push(result[i-2] + result[i-1]);
+  }
+  return result[n-1]; // or result[n-1] if you want to get the nth term
+}
+
+console.log(fib(10));
