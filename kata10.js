@@ -4,12 +4,32 @@
 
 function nbYear(p0, percent, aug, p) {
   var yearIncrease = 0;
-  percent = percent / 100;
   while (p0 < p) {
-    p0 = p0 + p0 * percent + aug;
+    p0 = p0 * (1 + percent / 100) + aug;
     yearIncrease++;
   }
   return yearIncrease;
 }
 
+function nbYear(p0, percent, aug, p) {
+  for(var y = 0; p0 < p; y++) p0 = p0 * (1 + percent / 100) + aug;
+  return y;
+}
+
+function nbYear(p0, percent, aug, p, years = 0) {
+  return p0 < p ? nbYear(p0 + p0 * percent / 100 + aug, percent, aug, p, years + 1) : years;
+}
+
 console.log(nbYear(1000, 0.1, 10, 1010));
+
+// Write a function called which verifies that a coupon code is valid, the coupon is not expired.
+//
+// A coupon is no more valid on the day AFTER the expiration date. All dates will be passed as strings in this format: "MONTH DATE, YEAR".
+//
+// Examples:
+// checkCoupon("123", "123", "July 9, 2015", "July 9, 2015")  ===  true
+// checkCoupon("123", "123", "July 9, 2015", "July 2, 2015")  ===  false
+
+function checkCoupon(enteredCode, correctCode, currentDate, expirationDate){
+  return enteredCode === correctCode && Date.parse(expirationDate) >= Date.parse(currentDate)
+}
