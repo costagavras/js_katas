@@ -7,7 +7,7 @@
 
 var uniqueInOrder=function(iterable){
   var newIterable = [];
-  if (iterable === "string") {
+  if (typeof iterable === "string") {
     iterable = iterable.split("");
   }
   for (var i = 0; i <= iterable.length; i++) {
@@ -26,6 +26,7 @@ var uniqueInOrder = function (iterable){
   }));
 }
 
-var uniqueInOrder=function(iterable){
+// incredibly slick!!!
+var uniqueInOrder = function(iterable){
     return [...iterable].filter((a, i) => a !== iterable[i-1])
 }

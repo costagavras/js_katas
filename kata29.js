@@ -9,12 +9,12 @@
 // -10 000 000 < y < 10 000 000
 
 function mixedFraction(s){
-  var [x,y] =s.split("/").map(z=>+z);
-  if (y===0) throw "ZeroDivisionError";
-  if (x%y===0) return ""+x/y;
-  var g = greatestCommonDivisor(Math.abs(x),Math.abs(y)), add = x/y<0 ? "-" : "";
-  x = Math.abs(x/g),y=Math.abs(y/g);
-  return add+(x<y ? "" : Math.floor(x/y)+" ")+x%y+"/"+y;
+  var [x,y] = s.split("/").map(z=>+z);
+  if (y === 0) throw "ZeroDivisionError";
+  if (x % y === 0) return "" + x/y;
+  var g = greatestCommonDivisor(Math.abs(x), Math.abs(y)), add = x/y < 0 ? "-" : "";
+  x = Math.abs(x/g), y = Math.abs(y/g);
+  return add +(x < y ? "" : Math.floor(x/y) + " ") + x % y + "/" + y;
 }
 
 function greatestCommonDivisor(x, y) {

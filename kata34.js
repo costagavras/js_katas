@@ -8,24 +8,24 @@
 
 // encryptThis("Hello") === "72olle";
 
-// var encryptThis = function(text) {
-//   var textArray = text.split(" ");
-//   var newTextArray = textArray.map(function(word){
-//     let firstChar = word.charCodeAt(0);
-//     if (word.length === 1) {return firstChar};
-//     if (word.length === 2) {return firstChar + word.charAt(1)};
-//     if (word.length > 2) {
-//       let secondChar = word.charAt(1)
-//       let lastChar = word.charAt(word.length-1);
-//       let middleChars;
-//       word.length > 3 ? middleChars = word.slice(2,word.length-1) : middleChars = "";
-//       return firstChar + lastChar + middleChars + secondChar;
-//     }
-//   }).join(" ");
-//   return newTextArray;
-// }
-//
-// console.log(encryptThis("A wise old owl lived in an oak"));
+var encryptThis = function(text) {
+  var textArray = text.split(" ");
+  var newTextArray = textArray.map(function(word){
+    let firstChar = word.charCodeAt(0);
+    if (word.length === 1) {return firstChar};
+    if (word.length === 2) {return firstChar + word.charAt(1)};
+    if (word.length > 2) {
+      let secondChar = word.charAt(1)
+      let lastChar = word.charAt(word.length-1);
+      let middleChars;
+      word.length > 3 ? middleChars = word.slice(2,word.length-1) : middleChars = "";
+      return firstChar + lastChar + middleChars + secondChar;
+    }
+  }).join(" ");
+  return newTextArray;
+}
+
+console.log(encryptThis("A wise old owl lived in an oak"));
 //
 // const encryptThis = text => text
 //   .split(' ')

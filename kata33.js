@@ -14,6 +14,7 @@ function WhatIsTheTime(timeInMirror){
   let [h, m] = timeInMirror.split(":");
   let h2, m2;
   m === "00" ? m2 = m : m2 = 60 - m;
+  // nested ternary, if not h >= "11", if m === "00" then if true h2 = 12 -h if false h2 = 11 - h;
   h >= "11" ? h2 = 23 - h : m === "00" ? h2 = 12 - h : h2 = 11 - h;
 
   if (m2.toString().length === 1) {

@@ -20,7 +20,7 @@ function queueTime(customers, n) {
 }
 
 console.log(queueTime([], 1));
-console.log(queueTime([1,2,3,4], 1));
+console.log(queueTime([1,2,3,4], 2));
 
 function queueTime(customers, n) {
   var w = new Array(n).fill(0);

@@ -3,15 +3,14 @@
 // gimme([2, 3, 1]) => 0
 
 var gimme = function (inputArray) {
-  return inputArray.indexOf(inputArray.filter(function(el){
+  return inputArray.indexOf(inputArray.filter(el => {
       el > Math.min(...inputArray) && el < Math.max(...inputArray)})[0]);
   };
 
-// const gimme = iA => iA.indexOf(iA.filter(a=>(
-//     a<Math.max(...iA) && a>Math.min(...iA)))[0]);
-
-console.log(gimme([20,12,9]));
-
+  
+// this is based on the assumption that it's a triple (i.e. returns [1]);
 var gimme = function (inputArray) {
   return inputArray.indexOf(inputArray.slice(0).sort(function(a,b) { return a-b; })[1]);
 };
+
+console.log(gimme([20,12,9]));

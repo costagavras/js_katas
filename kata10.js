@@ -2,25 +2,25 @@
 // the function nb_year should return n number of entire years needed to get a population greater or equal to p.
 // aug is an integer, percent a positive or null number, p0 and p are positive integers (> 0)
 
-function nbYear(p0, percent, aug, p) {
-  var yearIncrease = 0;
-  while (p0 < p) {
-    p0 = p0 * (1 + percent / 100) + aug;
-    yearIncrease++;
-  }
-  return yearIncrease;
-}
+// function nbYear(p0, percent, aug, p) {
+//   var yearIncrease = 0;
+//   while (p0 < p) {
+//     p0 = p0 * (1 + percent / 100) + aug;
+//     yearIncrease++;
+//   }
+//   return yearIncrease;
+// }
 
-function nbYear(p0, percent, aug, p) {
-  for(var y = 0; p0 < p; y++) p0 = p0 * (1 + percent / 100) + aug;
-  return y;
-}
+// function nbYear(p0, percent, aug, p) {
+//   for(var y = 0; p0 < p; y++) p0 = p0 * (1 + percent / 100) + aug;
+//   return y;
+// }
 
 function nbYear(p0, percent, aug, p, years = 0) {
   return p0 < p ? nbYear(p0 + p0 * percent / 100 + aug, percent, aug, p, years + 1) : years;
 }
 
-console.log(nbYear(1000, 0.1, 10, 1010));
+console.log(nbYear(1, 13.5, 0, 12));
 
 // Write a function called which verifies that a coupon code is valid, the coupon is not expired.
 //

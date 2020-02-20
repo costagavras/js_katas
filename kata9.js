@@ -14,17 +14,18 @@
 // SeriesSum(5) => 1 + 1/4 + 1/7 + 1/10 + 1/13 = "1.57"
 
 
-function SeriesSum(n){
-  for (var i = 0, sum = 0; i < n; i++) {
-    sum += 1/(3*i + 1);
-  }
-  console.log(String((sum).toFixed(2)));
-  return String((sum).toFixed(2));
-}
-
-// function SeriesSum(n) {
-//   return Array(n).fill(0).map((e, i) => 3 * i + 1).reduce((s, e) => s + 1 / e, 0).toFixed(2);
+// function SeriesSum(n){
+//   for (var i = 0, sum = 0; i < n; i++) {
+//     sum += 1/(3*i + 1);
+//   }
+//   console.log(String((sum).toFixed(2)));
+//   return String((sum).toFixed(2));
 // }
+
+function SeriesSum(n) {
+  // return Array(n).fill(0).map((e, i) => 3 * i + 1).reduce((s, e) => s + 1 / e, 0).toFixed(2);
+  return Array(n).fill(0).map((e, i) => 3 * i + 1);
+}
 //
 // const SeriesSum = (n, acc = 0) => {
 //   if (n === 0) return acc.toFixed(2);
@@ -42,13 +43,5 @@ function SeriesSum(n){
 //   }
 //   return sum.toFixed(2);
 // }
-//
-// function SeriesSum(n) {
-//   for (var s = 0, i = 0; i < n; i++) {
-//     s += 1 / (1 + i * 3)
-//   }
-//   console.log(s);
-//   return s.toFixed(2);
-// }
 
-SeriesSum(1);
+console.log(SeriesSum(5));

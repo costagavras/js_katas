@@ -4,13 +4,12 @@
 // the first number in the operation, and b always the second.
 // The four operators are "add", "subtract", "divide", "multiply".
 
-function arithmetic(a, b, operator){
-  var objActions = {add: a + b,subtract: a - b,multiply: a * b,divide: a / b};
-  return objActions[operator];
-}
+// function arithmetic(a, b, operator){
+//   var objActions = {add: a + b,subtract: a - b,multiply: a * b,divide: a / b};
+//   return objActions[operator];
+// }
 
-console.log(arithmetic(5,2,"multiply"));
-
+// easy and correct
 function arithmetic(a, b, operator){
   return [a+b, a-b, a*b, a/b][['add', 'subtract', 'multiply', 'divide'].indexOf(operator)]
 }
@@ -21,3 +20,5 @@ function arithmetic(a, b, operator){
   optable = { "add":"+", "subtract": "-", "multiply": "*" , "divide":"/"};
   return eval(a + optable[operator] + b);
 }
+
+console.log(arithmetic(5,2,"multiply"));
