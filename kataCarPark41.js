@@ -68,3 +68,51 @@ carpark = [
 
 
 console.log(escape(carpark));
+
+function escape(carpark){
+  var path = [];
+  var down = 0;
+  var i = -1;
+  var position = -1
+  
+  while(position==-1){
+    i++;
+    position = carpark[i].indexOf(2);
+  }
+  while(i < carpark.length){
+    var steps = carpark[i].indexOf(1);
+    if(steps != position){
+      if(down > 0){
+        path.push('D'+down)
+        down = 0;
+      }
+      if(i == carpark.length-1){
+        var groundFloorDistance = carpark[i].length-1 - position
+        if(groundFloorDistance > 0){
+          path.push('R'+groundFloorDistance)
+        }
+      } else {
+        path.push((position < steps ? 'R':'L')+Math.abs(position-steps))
+        position = steps;
+      }
+    }
+    down++;
+    position = steps;
+    i++;
+  }
+  
+  return path;
+}
+
+function escape(carpark){
+  var seq = [], i=carpark.findIndex(r=>r.includes(2)), x=carpark[i].indexOf(2);
+  while(i<carpark.length-1) {
+    let idx = carpark[i].indexOf(1), down = 0,
+        dist = idx-x;
+    seq.push(dist<0?`L${-dist}`:`R${dist}`);
+    for(;carpark[i][idx]===1; down++,i++);
+    seq.push(`D${down}`);
+    x = idx;
+  }
+  return x===carpark[0].length-1?seq:seq.concat(`R${carpark[0].length-1-x}`);
+}
