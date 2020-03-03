@@ -57,3 +57,72 @@ class Game {
 
 game = new Game(board)
 console.log(game.play());
+
+function Game(board) { this.board = board; }
+
+Game.prototype.play = function(){
+  const height = board.length;
+  const width = board[0].length;
+
+  // Eat all contiguous food, beginning in one cell.
+  const eat = (colI, rowI) => {
+    if (colI < 0 || colI >= width || rowI < 0 || rowI >= height || !this.board[rowI][colI]) { return; }
+    this.board[rowI][colI] = 0;
+    eat(colI - 1, rowI);
+    eat(colI + 1, rowI);
+    eat(colI, rowI - 1);
+    eat(colI, rowI + 1);
+  };
+  
+  // Scan through the board for uneaten food.
+  let leapCount = 0;
+  this.board.forEach((row, rowI) => {
+    row.forEach((isUneatenFoodCell, colI) => {
+     if (isUneatenFoodCell) {
+       ++leapCount;
+       eat(colI, rowI);
+     }
+    });
+  });
+  
+  return leapCount;
+};
+
+
+function Game(board){
+  this.board = board;
+}
+
+Game.prototype.play = function(){
+  var g = 0;
+  const fill=(i,j)=>[[i-1,j],[i+1,j],[i,j-1],[i,j+1]]
+                    .filter(([x,y])=>this.board[y]&&this.board[y][x])
+                    .forEach(([x,y])=>(this.board[y][x]=0,fill(x,y)));
+  for(let j=0; j<this.board.length; j++) for(let i=0; i<this.board[0].length; i++) if(this.board[j][i]) {
+      this.board[j][i]=0; fill(i,j);
+      g++;
+  }
+  return g;
+}
+
+function Game(board) {
+
+  function mark(x, y, n) {
+    if (!board[y] || !board[y][x]) return;
+    if (board[y][x] === 1) {
+      board[y][x] = n;
+      mark(x-1, y, n);
+      mark(x+1, y, n);
+      mark(x, y-1, n);
+      mark(x, y+1, n);
+    }
+  }
+
+  this.play = function() {
+    let n = 2;
+    for(let y = 0; y < board.length; y++)
+      for(let x = 0; x < board[y].length; x++)
+        if (board[y][x] === 1) mark(x, y, n++);
+    return n - 2;
+  }
+}
