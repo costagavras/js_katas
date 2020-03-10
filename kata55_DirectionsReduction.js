@@ -16,3 +16,17 @@ const dirReduc = arr => {
 
 console.log(dirReduc(["NORTH", "NORTH", "SOUTH", "SOUTH", "EAST", "WEST", "NORTH", "WEST", "SOUTH"]));
 console.log(dirReduc(["NORTH", "SOUTH", "EAST", "WEST", "EAST", "WEST"]));
+
+function dirReduc(arr){
+  var opposite = { "SOUTH":"NORTH", "NORTH":"SOUTH", "WEST":"EAST", "EAST":"WEST"}
+  return arr.reduce(function (a, b) {
+    opposite[a.slice(-1)] === b ? a.pop() : a.push(b)
+    return a
+  }, [])
+}
+
+function dirReduc(arr){
+  return arr.reverse().reduce(function (memo, v) {
+    return memo.length && ['NORTHSOUTH', 'SOUTHNORTH', 'EASTWEST', 'WESTEAST'].indexOf(v + memo[0]) >= 0 ? memo.slice(1) : [v].concat(memo)
+  }, [])
+}
