@@ -71,7 +71,7 @@ class SnakesLadders {
     2: 38, 7: 14, 8: 31, 15: 26, 21: 42, 28: 84, 36: 44, 51: 67, 71: 91, 78: 98, 87: 94
   }
 
-  var game = new SnakesLadders();
+  let game = new SnakesLadders();
   game.play(1, 1);
   game.play(1, 5);
   game.play(6,2);
