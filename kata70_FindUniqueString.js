@@ -33,18 +33,18 @@ function findUniq(arr) {
 function findUniq(arr) {
   var word = [];
   var res = ""
-  // var uniq = [...new Set(arr.join("").toLowerCase())].map(n=>(word = arr.filter(v=>v.indexOf(n) != -1),word.length==1) ? res = word.join("") : n);
-  var uniq = [...new Set(arr.join("").toLowerCase())].map(n=> {
-    console.log(`n1: ${n}`);
-    console.log(arr.filter(v=>v.indexOf(n) != -1));
-    if (word = arr.filter(v=>v.indexOf(n) != -1), word.length==1) { // The comma operator evaluates each of its operands (from left to right) and returns the value of the last operand.
-      console.log(word);
-      res = word.join("")
-    } else {
-      n;
-    }
+  var uniq = [...new Set(arr.join("").toLowerCase())].map(n=>(word = arr.filter(v=>v.indexOf(n) != -1),word.length==1) ? res = word.join("") : n);
+  // var uniq = [...new Set(arr.join("").toLowerCase())].map(n=> {
+  //   console.log(`n1: ${n}`);
+  //   console.log(arr.filter(v=>v.indexOf(n) != -1));
+  //   if (word = arr.filter(v=>v.indexOf(n) != -1), word.length==1) { // The comma operator evaluates each of its operands (from left to right) and returns the value of the last operand.
+  //     console.log(word);
+  //     res = word.join("")
+  //   } else {
+  //     n;
+  //   }
 
-  })
+  // })
   return res;
 }
 
