@@ -72,7 +72,7 @@ stringMerge=(a,b,l)=>a.split(l,1)+b.match(l+'.*')
 
 
 // console.log("removeZeros=a=>[...a.join``.replace(/^0+|0+$/g,'')]".length); // string 9500002 51
-console.log("removeZeros=a=>a.join``.replace(/(^0+)(.*?)(0+$)/,'$2')".length); // [ '9', '5', '0', '0', '0', '0', '2' ] 61
+// console.log("removeZeros=a=>a.join``.replace(/(^0+)(.*?)(0+$)/,'$2')".length); // [ '9', '5', '0', '0', '0', '0', '2' ] 61
 // removeZeros=a=>[...a.join``.replace(/(^0+)(.*?)(0+$)/g,'$2')]
 // removeZeros=a=>a.join``.replace(/\d)*/,a.join``.match(/[1-9]\d*[1-9]/g))
 // removeZeros=a=>a+''.replace(/^(0,)*(.*?)(,0)*$/g,'$2')
@@ -94,8 +94,8 @@ console.log("removeZeros=a=>a.join``.replace(/(^0+)(.*?)(0+$)/,'$2')".length); /
 // removeZeros=a=>a.join``.match(/((?!(^0+|0+$)).)/g)
 // console.log(removeZeros([0, 9, 5, 0, 0, 0, 0, 2, 0, 0]));
 // removeZeros=a=>[...a.join``.replace(/^0+|0+$/g,'')]
-removeZeros=a=>a.join``.replace(/(^0+)(.*?)(0+$)/,'$2')
-console.log(removeZeros([0, 9, 5, 0, 0, 0, 0, 2, 0, 0]));
+// removeZeros=a=>a.join``.replace(/(^0+)(.*?)(0+$)/,'$2')
+// console.log(removeZeros([0, 9, 5, 0, 0, 0, 0, 2, 0, 0]));
 
 // console.log("removeZeros=a=>[...a.join``.match(/[1-9]\d*[1-9]/g)[0]]".length); // [ '9', '5', '0', '0', '0', '0', '2' ] 54
 // removeZeros=a=>[...a.join``.match(/[1-9]\d*[1-9]/g)[0]]
@@ -110,3 +110,30 @@ console.log(removeZeros([0, 9, 5, 0, 0, 0, 0, 2, 0, 0]));
 // console.log("removeZeros=a=>/^(0+)(.*?)(0+$)/.exec(a.join``)[2]".length); // string 9500002 50
 // removeZeros=a=>/^(0+)(.*?)(0+$)/.exec(a.join``)[2]
 // console.log(removeZeros([0, 9, 5, 0, 0, 0, 0, 2, 0]));
+
+// ============================================================================ 
+
+// You are given an integer array a, your task is to determine whether the array is consistent 
+// with the arrangement:[x,xx,y,yy,z,zz...] and your code should be less than 38 characters.
+
+console.log("nNN=a=>(a+'').match(/(\d),\1{2}\b/g)+''==a".length); // 43
+// nNN=a=>(a+'').match(/(\d),\1{2}\b/g)+''==a //(\d) first group of one digit, (\,\1{2} matches literal , then same digit as 1st group exactly 2 times, \b assert position at a word boundary
+// nNN=a=>(a+'').replace(/(\d),\1{2}\b/g,'$&')==a
+// nNN=a=>(a+',').replace(/(\d),\1{2},/g,'')==''
+// nNN=a=>/(\d),\1{2},/g.exec(a+',')
+
+// nNN=a=>a.join``.replace(/(\d)\1{2}/g,'')==''
+nNN=a=>/^((\d),\2{2},)*$/.test(a+',')
+console.log(nNN([2,22,2,22,3,33]))
+
+nNN=a=>/^((.),\2\2,?)+$/.test(a)
+nNN=a=>/^((.*),\2\2)+$/.test(a)
+nNN=a=>/^((.),\2\2,?)+$/.test(a+'')
+
+nNN=a=>!a.reduce((a,b)=>a*11^b)
+nNN=([b,c,...d]=a)=>c/b==11?nNN(d):!b
+nNN=([a,b,...c])=>!a||b/a==11&&nNN(c)
+nNN=([a,b,...c])=>a?a*11==b*nNN(c):!b
+
+nNN=a=>!!/^(?:(.),\1\1,?)+$/.exec(a)
+nNN=n=>(n+='').match(/(.),\1{2}/g)==n
