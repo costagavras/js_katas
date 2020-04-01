@@ -116,24 +116,26 @@ stringMerge=(a,b,l)=>a.split(l,1)+b.match(l+'.*')
 // You are given an integer array a, your task is to determine whether the array is consistent 
 // with the arrangement:[x,xx,y,yy,z,zz...] and your code should be less than 38 characters.
 
-console.log("nNN=a=>(a+'').match(/(\d),\1{2}\b/g)+''==a".length); // 43
+// console.log("nNN=a=>(a+'').match(/(\d),\1{2}\b/g)+''==a".length); // 43
 // nNN=a=>(a+'').match(/(\d),\1{2}\b/g)+''==a //(\d) first group of one digit, (\,\1{2} matches literal , then same digit as 1st group exactly 2 times, \b assert position at a word boundary
 // nNN=a=>(a+'').replace(/(\d),\1{2}\b/g,'$&')==a
 // nNN=a=>(a+',').replace(/(\d),\1{2},/g,'')==''
 // nNN=a=>/(\d),\1{2},/g.exec(a+',')
 
 // nNN=a=>a.join``.replace(/(\d)\1{2}/g,'')==''
-nNN=a=>/^((\d),\2{2},)*$/.test(a+',')
+// nNN=a=>/^((\d),\2{2},)*$/.test(a+',')
+// console.log(nNN([2,22,2,22,3,33]))
+
+// nNN=a=>/^((.),\2\2,?)+$/.test(a)
+// nNN=a=>/^((.*),\2\2)+$/.test(a)
+// nNN=a=>/^((.),\2\2,?)+$/.test(a+'')
+
+// nNN=a=>!a.reduce((a,b)=>a*11^b)
+// nNN=([b,c,...d]=a)=>c/b==11?nNN(d):!b
+// nNN=([a,b,...c])=>!a||b/a==11&&nNN(c)
+// nNN=([a,b,...c])=>a?a*11==b*nNN(c):!b
+
+// nNN=a=>!!/^(?:(.),\1\1,?)+$/.exec(a)
+// nNN=n=>(n+='').match(/(.),\1{2}/g)==n
+
 console.log(nNN([2,22,2,22,3,33]))
-
-nNN=a=>/^((.),\2\2,?)+$/.test(a)
-nNN=a=>/^((.*),\2\2)+$/.test(a)
-nNN=a=>/^((.),\2\2,?)+$/.test(a+'')
-
-nNN=a=>!a.reduce((a,b)=>a*11^b)
-nNN=([b,c,...d]=a)=>c/b==11?nNN(d):!b
-nNN=([a,b,...c])=>!a||b/a==11&&nNN(c)
-nNN=([a,b,...c])=>a?a*11==b*nNN(c):!b
-
-nNN=a=>!!/^(?:(.),\1\1,?)+$/.exec(a)
-nNN=n=>(n+='').match(/(.),\1{2}/g)==n
