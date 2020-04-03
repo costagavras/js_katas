@@ -276,3 +276,138 @@ const countSmileys = arr => {
 // const smileys = str => /[:;][->~]{0,1}[D)]/.test(str)
 
 // const countSmileys = arr => arr.reduce((s, t) => s + (t.match(/[:;][~-]?[\)D]/g) || []).length, 0);
+
+// ========================================================================
+
+function revStr(strng) {
+  return [...strng].reverse().join('');
+} 
+function vertMirror(strng) {
+  return strng.split("\n").map(function(x) { return revStr(x); }).join("\n");
+}
+function horMirror(strng) {
+  return strng.split("\n").reverse().join("\n");
+}
+function oper(fct, s) {
+  return fct(s);
+}
+
+// const vertMirror = s => s.replace(/.+/g, v => [...v].reverse().join(''));
+// const horMirror = s => s.split('\n').reverse().join('\n');
+// const oper = (fct, s) => fct(s);
+
+// ========================================================================== 
+
+// const sum_pairs = (ints, s) => {
+//   const result = [], indices = [];
+//   for (i = 0; i < ints.length; i++) {
+//     for (k = i + 1; k <= ints.length; k++) {
+//       if (s === ints[i] + ints[k]) {
+//         result.push([ints[i], ints[k]]);
+//         indices.push(k);
+//       }
+//     }
+//   }
+//   return result[indices.indexOf(Math.min(...indices))];
+// }
+
+const sum_pairs = (ints, s) => {
+  const result = {};
+  for (const i of ints) {
+    if (result[s - i]) return [s - i, i];
+    // The return statement is returning from the function because it is not within another function definition. 
+    // To contrast this: in a array.forEach(callback()) function, a return statement would return fromthe callback() 
+    // function and not the actual outer function, so the next iteration of the forEach loop would continue afer the return statement.
+    // if (result[s - i]) console.log([s - i, i]);
+    result[i] = true;
+    console.log(result);
+  } 
+}
+
+// console.log(sum_pairs([10,5,2,3,7,5], 10));
+
+
+// function sum_pairs(ints, s) {
+//   let seen = new Set();
+//   for (let i of ints) {
+//     if (seen.has(s - i)) return [s - i, i];
+//     seen.add(i);
+//   }
+// }
+
+// sum_pairs=(i,s,o={})=>{for(let x of i)if(o[s-x])return[s-x,x];else o[x]=1}
+
+// =============================================================
+
+const stockList = (listOfArt, listOfCat) => {
+  if (!listOfArt.length) return '';
+  const result = {};
+  let resultString = '';
+  // listOfArt.forEach(el => result[el[0]] ? result[el[0]] += +el.split(' ')[1] : result[el[0]] = +el.split(' ')[1])
+  listOfArt.forEach(el => result[el[0]] = (result[el[0]] | 0) + +el.split(' ')[1]); // | 0 is to initialize when undefined
+  listOfCat.forEach(cat => result[cat] ? resultString += `(${cat} : ${result[cat]}) - ` : resultString += `(${cat} : 0) - `);
+  return resultString.slice(0, -3);
+}
+
+b = ["CBART 20", "CDXEF 50", "BKWRK 25", "BTSQZ 89", "DRTYM 60"]
+c = ["A", "B", "C", "W"]
+// console.log(stockList(b,c));
+
+// function stockList(listOfArt, listOfCat) {
+//   if (!listOfArt.length || !listOfCat.length) return ''
+//   return listOfCat.map(w => {
+//     const s = listOfArt.reduce((a, b) => a + (b.charAt(0) === w ? +b.split(' ')[1] : 0), 0)
+//     return `(${w} : ${s})`
+//   }).join(' - ')
+// }
+
+// const stockList = (la, lc) => la.length && lc.length ? lc.map(v => `(${v} : ${la.filter(w => v[0] == w[0]).reduce((a, c) => a + Number(c.split(' ')[1]), 0)})`).join(' - ') : '';
+
+// ===================================================== 
+
+// const wave = str => {
+//   let spacePos = [];
+//   str.split``.forEach((x, idx) => { if (x === ' ') spacePos.push(idx) }); 
+//   str = str.replace(/[' ']/g,'');
+//   let result = Array.from(Array(str.length), x => x = [...str]);
+
+//   for (let i = 0; i < result.length; i++) {
+//     result[i].splice(i,1,result[i][i].toUpperCase());
+//     if (spacePos.length) spacePos.forEach(el => result[i].splice(el,0,' '))
+//     result[i] = result[i].join``;
+//   }
+//   return result;
+// }
+
+// console.log(wave(' two words'))
+
+// function wave(str){
+//   let result = [];
+  
+//   str.split("").forEach((char, index) => {
+//       if (/[a-z]/.test(char)) {
+//           result.push(str.slice(0, index) + char.toUpperCase() + str.slice(index + 1));
+//       }
+//   });
+  
+//   return result;
+// }
+
+// var wave=w=>[...w].map((a,i)=>w.slice(0,i)+a.toUpperCase()+w.slice(i+1)).filter(a=>a!=w)
+
+const wave = str => 
+  [...str].map((s, i) => // loops through each letter of the created array
+      str.slice(0, i) + s.toUpperCase() + str.slice(i + 1)) // slices first iteration (i) + creates Upper case and adds the rest with slice (i + 1), this creates as many strings as there are iterations (letters)
+      .filter(x => x != str); // filters for strings that are different from the original string (it means they are created equal (no upperCase on space) when space is hit)
+
+  // function wave(s){
+  //   // Code here
+  //   let w=[]
+  //   for(let i=0;i<s.length;i++){
+  //     w.push(s.substring(0,i)+s.charAt(i).toUpperCase()+s.slice(i+1))
+  
+  //   }
+  //   return w.filter(x=>x!=s);
+  // }
+
+console.log(wave(' two words '))
