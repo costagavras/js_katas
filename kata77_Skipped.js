@@ -410,4 +410,4 @@ const wave = str =>
   //   return w.filter(x=>x!=s);
   // }
 
-console.log(wave(' two words '))
+// console.log(wave(' two words '))
