@@ -47,6 +47,8 @@ const revrot = (str, sz) => {
 
 // console.log(revrot("", 5))
 
+// =================Longest Palindrome=============================================
+
 // Find the length of the longest substring in the given string s that is the same in reverse.
 // As an example, if the input was “I like racecars that go fast”, the substring (racecar) length would be 7.
 // If the length of the input string is 0, the return value must be 0.
@@ -114,6 +116,8 @@ let isPalindrome = str => str.split('').reverse().join('') === str;
 //     return longestPalLength;
 // }
 
+// ======================================================================
+
 // Given a string S. You have to return another string such that even-indexed and odd-indexed 
 // characters of S are grouped and groups are space-separated (see sample below). 0 is even, strings with no spaces
 
@@ -136,15 +140,13 @@ const sortMyString = s => {
 //   return S.split('').filter((s,i)=>i%2==0).join('')+" "+S.split('').filter((s,i)=>i%2==1).join('');
 // }
 
-// ==================Caesar Cipher=======================
+// ==================Caesar Cipher=============================================
 
-const sABC = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
+// const sABC = 'abcdefghijklmnopqrstuvwxyz';
 
 const encodeStr = (s,shift) => {
-  console.log(s.length);
-  const sABCShifted = sABC.slice(shift);
-  let encoded = ''; let divisor = 0;
-  encoded = s[0].toLowerCase() + sABCShifted[sABC.indexOf(s[0].toLowerCase())];
+  const sABCShifted = sABC.slice(shift)+sABC;
+  let encoded = s[0].toLowerCase() + sABCShifted[sABC.indexOf(s[0].toLowerCase())];
   for (let i = 0;i < s.length; i++) {
     if (sABC.includes(s[i]) || sABC.toUpperCase().includes(s[i])) {
       encoded += s[i] === s[i].toLowerCase() ? sABCShifted[sABC.indexOf(s[i])] : sABCShifted[sABC.indexOf(s[i].toLowerCase())].toUpperCase();
@@ -152,21 +154,17 @@ const encodeStr = (s,shift) => {
       encoded += s[i];
     }
   }
-  divisor = Math.ceil(encoded.length / 5)
+  let divisor = Math.ceil(encoded.length / 5)
 
   return encoded.match(new RegExp('.{1,' + divisor + '}','g'));
+  // return enc.match(RegExp(`.{1,${Math.ceil(enc.length/5)}}`,'g'))
 }
 
 const decode = arr => {
-  let decodedStr = arr.join``;
-  console.log(decodedStr)
-  decodedStr = decodedStr.replace(/(,(?!\s)(?!,?$))/g, '')
-  console.log(decodedStr);
   let decoded = '';
+  let decodedStr = arr.join``.replace(/(,(?!\s)(?!,?$))/g, '')
   const shift = sABC.indexOf(decodedStr[1].toLowerCase()) - sABC.indexOf(decodedStr[0].toLowerCase());
   const sABCShifted = sABC.slice(shift)+sABC;
-  console.log(sABCShifted);
-  
   for (let i = 2;i < decodedStr.length; i++) {
     if (sABCShifted.includes(decodedStr[i]) || sABCShifted.toUpperCase().includes(decodedStr[i])) {
       decoded += decodedStr[i] === decodedStr[i].toLowerCase() ? sABC[sABCShifted.indexOf(decodedStr[i])] : sABC[sABCShifted.indexOf(decodedStr[i].toLowerCase())].toUpperCase();
@@ -178,8 +176,114 @@ const decode = arr => {
   return decoded;
 }
 
+// var alpha = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+// const code = c => alpha.indexOf(c),
+//       fromCode = i => alpha[(i + alpha.length) % alpha.length]
+      
+// function encodeStr(s, shift) {
+//     var enc = [...s].map(c=> code(c) != -1 ?fromCode(code(c) + shift) : c).join('');
+//     enc = s[0].toLowerCase() + fromCode(code(s[0].toLowerCase()) + shift) + enc;
+//     return enc.match(RegExp(`.{1,${Math.ceil(enc.length/5)}}`,'g'))
+// }
+
+// function decode(arr) {
+//   var shift = alpha.indexOf(arr[0][1]) - alpha.indexOf(arr[0][0])
+//   arr[0] = arr[0].slice(2)
+//   return arr.map(p=> [...p].map(c=> code(c) != -1 ?fromCode(code(c) - shift) : c).join('')).join('')
+// }
+
+
 // console.log(encodeStr("abcdefghjuty12", 1));
 // console.log(encodeStr("I should have known that you would have a perfect answer for me!!!", 1));
-console.log(decode(["ihH gzud roqdzc lx cqdz", "lr tmcdq xntq edds; Sqd", "zc rneskx adbztrd xnt s", "qdzc nm lx cqdzlr. Vhkk", "hzl A Xdzsr (1865-1939)"]));
-// H gaud roqdac lx cqdalr tmcdq xntq edds; Sqdac rneskx adbatrd xnt sqdac nm lx cqdalr. Vhkkhal A Xdasr (1865-1939)
-// I have spread my dreams under your feet; Tread softly because you tread on my dreams. William B Yeats (1865-1939)
+// console.log(decode(["ihH gzud roqdzc lx cqdz", "lr tmcdq xntq edds; Sqd", "zc rneskx adbztrd xnt s", "qdzc nm lx cqdzlr. Vhkk", "hzl A Xdzsr (1865-1939)"]));
+
+// ==================================Tank Volume=====================================
+
+const tankvol = (h,d,vt) => {
+  const r = d/2;
+  const alpha = 2 * Math.acos(1 - h/r);
+  const areaSegment = r**2 / 2 * (alpha - Math.sin(alpha));
+  const areaCircle = r**2 * Math.PI;
+  const ratio = areaSegment / areaCircle;
+  return ~~(ratio * vt);
+}
+
+// console.log(tankvol(40,120,3500));
+
+// =================================================================================== 4ku Strings Mix
+
+const createObjectLengths = str => {
+  let oStr = {};
+  while (str.length > 0) {
+    let strLen = str.length;
+    oStr[str[0]] = strLen - [...str].filter(a => a !== str[0]).length;
+    str = [...str].filter(a => a !== str[0]);
+  }
+  return oStr;
+}
+
+const sABC = 'abcdefghijklmnopqrstuvwxyz';
+
+const mix = (s1,s2) => {
+  const oS1 = createObjectLengths(s1), oS2 = createObjectLengths(s2);
+  let aComparison = [];
+  for (let i = 0; i < sABC.length; i++) {
+    if (oS1[sABC[i]] && oS2[sABC[i]] && oS1[sABC[i]] !== 1) { // case both keys exist and >1
+      if (oS1[sABC[i]] > oS2[sABC[i]]) aComparison.push(`1:${sABC[i].repeat(oS1[sABC[i]])}`);
+      if (oS1[sABC[i]] < oS2[sABC[i]]) aComparison.push(`2:${sABC[i].repeat(oS2[sABC[i]])}`);
+      if (oS1[sABC[i]] === oS2[sABC[i]]) aComparison.push(`=:${sABC[i].repeat(oS1[sABC[i]])}`);
+    } else if (oS1[sABC[i]] && oS1[sABC[i]] > 1) aComparison.push(`1:${sABC[i].repeat(oS1[sABC[i]])}`);
+      else if (oS2[sABC[i]] && oS2[sABC[i]] > 1) aComparison.push(`2:${sABC[i].repeat(oS2[sABC[i]])}`);
+  aComparison = aComparison.sort((a,b) => b.length - a.length || (a < b ? -1 : 1)); // Sort by length, then lexicographically
+  }
+  return aComparison.join`/`;
+}
+
+// ==
+// const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
+// function mix(s1, s2) {
+//   return alphabet
+//     .map(char => {
+//       const s1Count = s1.split('').filter(x => x === char).length,
+//             s2Count = s2.split('').filter(x => x === char).length,
+//             maxCount = Math.max(s1Count, s2Count);
+
+//       return { //creates an object per letter { char: 'a', count: 1, src: '=' }, { char: 'n', count: 5, src: '1' } etc.
+//         char: char,
+//         count: maxCount,
+//         src: maxCount > s1Count ? '2' : maxCount > s2Count ? '1' : '='
+//       };
+//     })
+//     .filter(c => c.count > 1)
+//     .sort((objA, objB) => objB.count - objA.count || (objA.src + objA.char > objB.src + objB.char ? 1 : -1))
+//     .map(c => `${c.src}:${c.char.repeat(c.count)}`)
+//     .join('/');
+// }
+
+// [...Array(count)].map(_=>key).join('');
+
+// console.log(mix("A generation must confront the looming ", "codewarrs"));
+
+// ======================create array of letters==================
+  const alphabet = () => {
+    return Array.from({ length: 26 }, (_,i) => i) // mapFn
+        .map(i => 'a'.codePointAt(0) + i)
+        .map(i => String.fromCodePoint(i));
+  }
+
+  // console.log(alphabet());
+
+  // Converts strings to objects with the key/value pattern obj.a = 'aaa' etc
+  function bucket(s) {
+    const re = /[a-z]/g;
+    let m = null;
+    const b = {};
+    while (m = re.exec(s)) {
+      let [x] = m;
+      b[x] = (b[x] || '') + x;
+    }
+    return b;
+  }
+
+  console.log(bucket("hello, world!"));
