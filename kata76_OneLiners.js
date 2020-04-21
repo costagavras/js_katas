@@ -136,6 +136,27 @@ stringMerge=(a,b,l)=>a.split(l,1)+b.match(l+'.*')
 // nNN=([a,b,...c])=>a?a*11==b*nNN(c):!b
 
 // nNN=a=>!!/^(?:(.),\1\1,?)+$/.exec(a)
-// nNN=n=>(n+='').match(/(.),\1{2}/g)==n
+nNN=n=>(n+='').match(/(.),\1{2}/g)==n
 
-console.log(nNN([2,22,2,22,3,33]))
+// console.log(nNN([2,22,2,22,3,33]))
+
+// ========================= palindrome ====================
+
+// Your task is to generate a palindrome string, using the specified length n, 
+// the specified characters c (all characters in c must be used at least once), 
+// and the code length should less than: 62 characters
+
+// console.log('palindrome=(n,c)=>(c+c.slice(-1).repeat(n-c.length-1)+c[0])'.length);
+console.log('palindrome=(n,c)=>[...c].reverse().join``'.length);
+
+// palindrome=(n,c)=>(c+c.slice(-1).repeat(n-c.length-1)+c[0])
+// palindrome=(n,c)=>c+'z'.repeat(n-2*c.length)+[...c].reverse().join``;
+// palindrome=(n,c)=>c+[...c].reduceRight((a,c,i)=>a+c);
+palindrome=(n,c)=>Array(n).fill('x');
+
+// console.log(palindrome(1,'a'));
+// console.log(palindrome(3,'ab'));
+// console.log(palindrome(10,'ab'));
+console.log(palindrome(20,'abcd'));
+// console.log(palindrome(51,'abcdefghijklmnopqrstuvwxyz'));
+// let board = Array(8).fill().map(() => Array(9).fill('*'));

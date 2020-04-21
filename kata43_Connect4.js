@@ -226,46 +226,46 @@
 
 
 
-// const whoIsWinner = posishList => {
-//   if (posishList.length <= 6) return 'Draw';
-//   const [player1, player2] = [posishList[0].slice(2),posishList[1].slice(2)];
-//   const [player1Plays, player2Plays] = [getPosishListNum(posishList).filter((_,idx) => !(idx % 2)).map(v => +v), getPosishListNum(posishList).filter((_,idx) => idx % 2).map(v => +v)];
+const whoIsWinner = posishList => {
+  if (posishList.length <= 6) return 'Draw';
+  const [player1, player2] = [posishList[0].slice(2),posishList[1].slice(2)];
+  const [player1Plays, player2Plays] = [getPosishListNum(posishList).filter((_,idx) => !(idx % 2)).map(v => +v), getPosishListNum(posishList).filter((_,idx) => idx % 2).map(v => +v)];
 
-//   for (let i = 4; i <= Math.max(player1Plays.length, player2Plays.length); i++) {
-//     if (checkWin(player1Plays.slice(0,i))) return player1;
-//     if (checkWin(player2Plays.slice(0,i))) return  player2;
-//   }
-//   return 'Draw';
-// }
+  for (let i = 4; i <= Math.max(player1Plays.length, player2Plays.length); i++) {
+    if (checkWin(player1Plays.slice(0,i))) return player1;
+    if (checkWin(player2Plays.slice(0,i))) return  player2;
+  }
+  return 'Draw';
+}
 
-// const getPosishListNum = list => {
-//   const aCols = { "A": 1, "B": 2, "C": 3, "D": 4, "E": 5, "F": 6, "G": 7}
-//   let aRowPosish = {};
+const getPosishListNum = list => {
+  const aCols = { "A": 1, "B": 2, "C": 3, "D": 4, "E": 5, "F": 6, "G": 7}
+  let aRowPosish = {};
 
-//   return list.map(pc => {
-//     aRowPosish[pc[0]] = aRowPosish[pc[0]] + 1 || 1;
-//     return String(aRowPosish[pc[0]]) + String(aCols[pc[0]]);
-//   })
-// }
+  return list.map(pc => {
+    aRowPosish[pc[0]] = aRowPosish[pc[0]] + 1 || 1;
+    return String(aRowPosish[pc[0]]) + String(aCols[pc[0]]);
+  })
+}
 
-// const checkWin = aPlays => {
-//   let nextMatch, match;
-//   for(let i = 0; i < aPlays.length; i++) {
-//     [1,9,10,11].some(el => { // 1 matches row, 9 - left diag., 10 - col, 11 - right diag.
-//       nextMatch = +aPlays[i];
-//       match = 1;
-//         while (nextMatch) {
-//           nextMatch = aPlays.find(p => p === (nextMatch + el)); 
-//           if (nextMatch) {
-//               match++
-//           } else break;
-//           if (match === 4) return true;
-//         }
-//       });
-//       if (match === 4) return true;
-//   }
-//   return false;
-// }
+const checkWin = aPlays => {
+  let nextMatch, match;
+  for(let i = 0; i < aPlays.length; i++) {
+    [1,9,10,11].some(el => { // 1 matches row, 9 - left diag., 10 - col, 11 - right diag.
+      nextMatch = +aPlays[i];
+      match = 1;
+        while (nextMatch) {
+          nextMatch = aPlays.find(p => p === (nextMatch + el)); 
+          if (nextMatch) {
+              match++
+          } else break;
+          if (match === 4) return true;
+        }
+      });
+      if (match === 4) return true;
+  }
+  return false;
+}
 
 
 // const checkWin = aPlays => {
@@ -415,46 +415,46 @@
 //   return 'Draw';
 // }
 
-function whoIsWinner(pieces) {
-  const grid = [...Array(7)].map(col => []);
-  const won = (color, col, row, x, y) => {
-    let total = 0;
-    while (grid[col+x] && grid[col+x][row+y] === color) {
-      col += x;
-      row += y;
-    }
-    while (grid[col] && grid[col][row] === color) {
-      total++;
-      col -= x;
-      row -= y;
-    }
-    return total >= 4;
-  }
-  for (const [letter, color] of pieces.map(piece => piece.split('_'))) {
-    const col = letter.charCodeAt(0)-'A'.charCodeAt(0);
-    const row = grid[col].push(color) - 1;
-    for (const [x, y] of [[1, 0], [0, 1], [1, 1], [1, -1]])
-      if (won(color, col, row, x, y))
-        return color;
-  }
-  return "Draw";
-}
+// function whoIsWinner(pieces) {
+//   const grid = [...Array(7)].map(col => []);
+//   const won = (color, col, row, x, y) => {
+//     let total = 0;
+//     while (grid[col+x] && grid[col+x][row+y] === color) {
+//       col += x;
+//       row += y;
+//     }
+//     while (grid[col] && grid[col][row] === color) {
+//       total++;
+//       col -= x;
+//       row -= y;
+//     }
+//     return total >= 4;
+//   }
+//   for (const [letter, color] of pieces.map(piece => piece.split('_'))) {
+//     const col = letter.charCodeAt(0)-'A'.charCodeAt(0);
+//     const row = grid[col].push(color) - 1;
+//     for (const [x, y] of [[1, 0], [0, 1], [1, 1], [1, -1]])
+//       if (won(color, col, row, x, y))
+//         return color;
+//   }
+//   return "Draw";
+// }
 
-console.log(whoIsWinner(['G_Red',
-'F_Yellow',
-'F_Red',
-'F_Yellow',
-'A_Red',
-'D_Yellow',
-'F_Red',
-'F_Yellow',
-'E_Red',
-'E_Yellow',
-'E_Red',
-'B_Yellow',
-'D_Red',
-'D_Yellow',
-'B_Red',
-'B_Yellow',
-'C_Red',
-'F_Yellow'])); // exp red, not draw
+// console.log(whoIsWinner(['G_Red',
+// 'F_Yellow',
+// 'F_Red',
+// 'F_Yellow',
+// 'A_Red',
+// 'D_Yellow',
+// 'F_Red',
+// 'F_Yellow',
+// 'E_Red',
+// 'E_Yellow',
+// 'E_Red',
+// 'B_Yellow',
+// 'D_Red',
+// 'D_Yellow',
+// 'B_Red',
+// 'B_Yellow',
+// 'C_Red',
+// 'F_Yellow'])); // exp red, not draw

@@ -287,3 +287,5 @@ const mix = (s1,s2) => {
   }
 
   console.log(bucket("hello, world!"));
+
+  
