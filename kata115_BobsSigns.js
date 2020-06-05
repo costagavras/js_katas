@@ -145,7 +145,7 @@
 
 // console.log(sign.estimatePrice('swhmb55pe4k2boc13wh', 'qw8nxf7hz9zdrd7a7orh'));
 
-// =============================
+// =============================My old stuff======
 
 // SignMaster.prototype.estimatePrice = function(oldSign, newSign) {
 //   let oOldSign = {}, oNewSign = {};

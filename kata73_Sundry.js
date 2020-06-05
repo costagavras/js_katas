@@ -104,7 +104,7 @@ const swapHeadAndTail = arr => {
 
 const reverse = str => str.trim().split` `.map((word, idx) => idx % 2 !== 0 ? word.split``.reverse().join`` : word).join` `
 
-console.log(reverse("I really don't like reversing strings!"));
+// console.log(reverse("I really don't like reversing strings!"));
 
 
 function reverse(string) {
@@ -114,3 +114,10 @@ function reverse(string) {
     .join` `
     .trim();
 }
+
+// ======================== Sort Santas Reindeer =================
+
+const sortReindeer = rd => rd.sort((a,b) => a.split` `[1].localeCompare(b.split` `[1]));
+
+// console.log(sortReindeer(["Dasher Tonoyan", "Dancer Moore", "Prancer Chua", "Vixen Hall",
+// "Comet Karavani", "Cupid Foroutan", "Donder Jonker", "Blitzen Claus"]));
