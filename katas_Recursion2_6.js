@@ -193,14 +193,14 @@ const hofstadterQ = (n, memo = {1:1, 2:1}) => memo[n] || (memo[n] = hofstadterQ(
 
 // ================ Strings, Strings, Strings (Hard) =================
 
-String.prototype.toString = function() {
-  const result = this.map(el => typeof el === 'string' ? `'${el}'` : el);
-  return `[${result.join(',')}]`;
-}
+// String.prototype.toString = function() {
+//   const result = this.map(el => typeof el === 'string' ? `'${el}'` : el);
+//   return `[${result.join(',')}]`;
+// }
 
-String.prototype.toString = function(){
-  return `${this}`.replace(/"/g, "'")
-}
+// String.prototype.toString = function(){
+//   return `${this}`.replace(/"/g, "'")
+// }
 
 // console.log([1,2.72,4,3.14,9].toString());
 // console.log(["Hello World",3.14,"Lorem Ipsum"].toString());
@@ -253,74 +253,57 @@ let files = {
   in: 
    { in:              { linear: [Object] },
      dimensionality:  { that: [Object], over: [Object], 'and.some': 'some' },
-     some:            { all: [Object] } },
+     some:            { all: [] } },
   a: 
-   { be:              { dimensional: [Object], as: [Object] },
+   { be:              { dimensional: [Object], as: [] },
      subspace:        { are: [Object], linear: [Object] } } 
 };
 
-// correct: 'in/dimensionality/and.some'
-// me:      'in/in/dimensionality/that/over/and.some'
-
 const search = files => {
-  var path = '', successPath = '', aPaths = [];
-  const loopNestedObj = (obj, path) => {
-    console.log('path_before: ', path);
-    for (const key in obj) {
-      console.log(key, '/', obj[key]);
-      if (aPaths.length > 0) path = aPaths[aPaths.length -1];
-      console.log('path_middle: ', path);
-      if (key == 0) {
-        console.log('path1: ', path);
-        path = path.slice(0, -1);
-        path = path.slice(0, path.lastIndexOf('/'));
-        console.log('path2: ', path);
-        aPaths.pop();
-        console.log('aPaths_key0: ', aPaths);
-        break;
-      }
-      console.log('path_after1: ', path)
-      typeof obj[key] === 'string' ? successPath = path + key : path += key + '/';
-      console.log('path_after2: ', path)
-      aPaths.push(path);
-      console.log('aPaths_keyExists: ', aPaths);
-      if (typeof obj[key] === "object") loopNestedObj(obj[key], path);
-    };
-  };
-
-  for (let node in files) {
-    if (files[node] && typeof files[node] === 'object') loopNestedObj(files[node], path);
+  let pathSuccess = '';
+  const looped = (files, path = '') => {
+    for (const node in files) {
+      if (typeof files[node] === 'string') {
+        pathSuccess = path + '/' + node;
+      } else {
+        looped(files[node], path + '/' + node);
+      } 
+    }               
   }
-  console.log(successPath);
-  if (!successPath) throw new Error('No files');
-  else return successPath;
+  looped(files);
+  if (!pathSuccess) throw new Error('No files');
+  return pathSuccess.slice(1);
 }
 
-
-// console.log(search(files));
-
-// correct: 'in/dimensionality/and.some'
-// me:      'in/in/dimensionality/that/over/and.some'
-
-// solves 60%
-
-// const search = files => {
-//   console.log(files);
-//   let successPath;
-//   const loopNestedObj = (obj, path) => {
-//     Object.entries(obj).forEach(([key, val]) => {
-//       val && typeof val === 'string' ? successPath = path + key : path += key + '/';
-//       if (val && typeof val === "object") loopNestedObj(val, path, successPath);
-//     });
-//   };
-
-//   for (let node in files) {
-//     let path = '';
-//     if (files[node] && typeof files[node] === 'object') loopNestedObj(files[node], node + '/');
+// function search(files) {
+//   const stack = [[files, []]]
+//   while (stack.length > 0) {
+//     console.log(stack);
+//     const [item, path] = stack.pop() // destructuring of stack[0] which is [files, []] first run;
+//     console.log('item: ', item, 'path: ', path);
+//     if (typeof item === "string") {
+//       return path.join("/")
+//     }
+//     for (const key in item) {
+//       stack.push([item[key], [...path, key]])
+//     }
 //   }
-//   if (!successPath) throw new Error('No files');
-//   else return successPath;
+//   throw new Error("No files!")
 // }
+
+// function search(files, path = '') {
+//   if (typeof files === 'string') return path.slice(1);
+
+//   for (let folder in files)
+//     try {
+//       return search(files[folder], path + '/' + folder);
+//     }
+//     catch(e) {}
+
+//   throw new Error('No files!');
+// }
+
+console.log(search(files));
 
 // =================================== Sum The Tree ===================
 
@@ -493,5 +476,449 @@ const snap = (flashPile, turtlePile, commonPile = [], snapCount = 0) => {
 //   return snap([b, ...c, a, x], y);
 // }
 
-console.log(snap([ '9','5','4','4','A','8','4','3','K','J','J','Q','Q','9','8','5','J','6','7','6','A','J','9','K','3','8' ], 
-              [ 'K','10','3','4','5','Q','2','7','A','A','Q','10','6','5','K','6','7','10','2','9','2','10','7','8','2','3' ]));
+// function snap(flashPile, turtlePile, snapCount = 0) {
+//   let middlePile = []; 
+  
+//   let currentPile = flashPile;
+//   while (turtlePile.length){
+//     middlePile.push(currentPile.shift());
+    
+//     if(middlePile[middlePile.length-1] === middlePile[middlePile.length-2]){
+//       flashPile.push(...middlePile);
+//       snapCount++;
+//       return snap(flashPile, turtlePile,snapCount);
+//     } 
+    
+//      currentPile = (currentPile === flashPile) ? turtlePile : flashPile;
+//   }
+  
+//   return snapCount;
+// }
+
+// console.log(snap([ '9','5','4','4','A','8','4','3','K','J','J','Q','Q','9','8','5','J','6','7','6','A','J','9','K','3','8' ], 
+              // [ 'K','10','3','4','5','Q','2','7','A','A','Q','10','6','5','K','6','7','10','2','9','2','10','7','8','2','3' ]));
+
+// ======================= Happy Numbers =======================
+
+const happyNumbers = x => {
+  let result = [];
+  for (let i = 1; i <= x; i++) {
+    result.push(squareDigits(i.toString(), [], i));
+  }
+  return result.filter(Boolean);
+}
+
+const squareDigits = (digits, aTest, digOriginal) => {
+  if (digits == 1) return digOriginal;
+  if (aTest.includes(digits)) return null;
+  aTest.push(digits);
+  let res = [...digits].reduce((acc, val) => acc + val*val, 0);
+  return squareDigits(res.toString(), aTest, digOriginal);
+}
+
+// function happyNumbers(x){
+//   const check = (n, sums = new Set) => {  
+//     const sum = n.toString().split('').reduce((acc, cur) => {
+//         return acc + cur ** 2
+//       }, 0)
+    
+//     if (sum === 1) return true;
+//     if (sums.has(sum)) return false;
+//     sums.add(sum);
+//     return check(sum, sums);
+//   }
+  
+//   const res = [1];
+//   for(let i = 2; i <= x; i++) check(i) && res.push(i);
+  
+//   return res;
+// }
+
+// function happyNumbers(x){
+//   const answer = [];
+//   for (let i = 1; i <= x; i++) {
+//     const arr = [];
+//     let number = i;
+//     while(!arr.includes(number)) {
+//       arr.push(number);
+//       number = String(number).split('').map(it => Number(it)**2).reduce((acc, curr) => acc + curr);
+//     }
+//     if (arr[arr.length - 1] === 1) {
+//       answer.push(i);
+//     }
+//   }
+//   return answer;
+// }
+
+// function happyNumbers(x){
+//   function isHappy(i, set) {
+//     if (i == 1) return true;
+//     if (set.has(i)) return false;
+//     set.add(i);
+//     return isHappy(String(i).split('').reduce((s, el) => s + el ** 2, 0), set);
+//   }
+  
+//   return Array.from({ length: x }, (_, i) => i + 1).filter(i => {
+//     const set = new Set();
+//     return isHappy(i, set);
+//   });
+// }
+
+// function happyNumbers(x){
+//   return Array.from({ length: x }, (_, i) => i + 1).filter(checkHappiness);// Array.from(..., map());
+//  }
+ 
+//  function checkHappiness(n, sequence = {}){
+//    const res = String(n).split('').reduce((r, s) => r + Math.pow(s, 2), 0);
+//    if (res === 1) return true;
+//    if (sequence[res]) return false;
+//    console.log(sequence);
+//    return checkHappiness(res, { ...sequence, [res]: true });
+//  }
+
+// console.log(happyNumbers(10));
+
+// ======================== Mutual Recursion ===================
+
+// const hofstadterQ = (n, memo = {1:1, 2:1}) => {
+//   return memo[n] || (memo[n] = hofstadterQ(n - hofstadterQ(n-1, memo), memo) + hofstadterQ(n - hofstadterQ(n-2, memo), memo));
+// } 
+
+const F = n => {
+  return n ? n - M(F(n-1)) : 1;
+}
+
+const M = n => {
+  return n ? n - F(M(n-1)) : 0;
+}
+
+// function S(gender, n) {
+//   var index = 2 * n + gender;
+//   if (!(index in S))
+//     S[index] = n ? n - S(!gender, S(gender, n - 1)) : gender;
+//   return S[index];
+// }
+
+// let Fcache = {}
+// let Mcache = {}
+
+// function F(n) { 
+//   if (n==0) return 1  
+//   if (Fcache[n]) return Fcache[n]
+//   let result = n - M(F(n-1))
+//   Fcache[n] = result
+//   return result
+// }
+
+// function M(n) { 
+//   if (n==0) return 0
+//   if (Mcache[n]) return Mcache[n]
+//   let result = n - F(M(n - 1))
+//   Mcache[n] = result
+//   return result
+// }
+
+// const fMemo = [1]
+// const mMemo = [0]
+
+// function F(n, memo =[]) {
+//   if (fMemo[n] !== undefined) return fMemo[n]
+//   return n - M(F(n-1, fMemo), mMemo)
+// }
+
+// function M(n, memo =[]) { 
+//   if (mMemo[n] !== undefined) return mMemo[n]
+//   return n - F(M(n-1, mMemo), fMemo)
+// }
+
+
+// console.log(M(8));
+
+// ==================== Tree Depth ========================
+
+let tree2 = {a: 1, b: 2, c: {d: {e: 3}}};
+
+const recordDepth = tree => {
+  if (typeof tree !== 'object' || Array.isArray(tree) || !tree) return null;
+  tree.depth = 0;
+  loopDepth(tree, 0);
+  return tree;
+}
+
+const loopDepth = (tree, depthLevel) => {
+  for (const item in tree) {
+    if (typeof tree[item] === 'object') {
+      depthLevel++;
+      tree[item].depth = depthLevel;
+      loopDepth(tree[item], depthLevel);
+    }
+  }
+}
+
+// const recordDepth = (tree, depth = 0) => { 
+//   if (typeof tree != 'object' || !tree || Array.isArray(tree)) return null
+//   for (let key in tree) {
+//       if (typeof tree[key] == 'object') tree[key] = recordDepth(tree[key], depth+1)
+//    }
+//    return {...tree, depth}
+// }
+
+// const isObject = x => x && typeof x === 'object' && !Array.isArray(x);
+
+// function recordDepth(tree, depth = 0) {
+//   if (!isObject(tree)) {
+//     return null;
+//   }
+//   for (let [key, value] of Object.entries(tree)) {
+//     if (isObject(value)) {
+//       tree[key] = recordDepth(value, depth + 1);
+//     }
+//   }
+//   tree.depth = depth;
+//   return tree;
+// }
+
+// const recordDepth = (tree, depth=0) => {
+//   if (tree && typeof tree === "object" && !Array.isArray(tree)) {
+//     tree.depth = depth;
+//     Object.values(tree).forEach(v => recordDepth(v, depth + 1));
+//     return tree;
+//   }
+//   return null;
+// };
+
+// function recordDepth(tree, depth = 0) {
+//   if (tree === null || tree.constructor !== Object) return null;
+  
+//   tree.depth = depth
+//   for (let prop in tree) recordDepth(tree[prop], depth + 1)
+//   return tree
+// }
+
+// console.log(recordDepth(tree2));
+
+// ======================== Array Deep Count ========================
+
+const deepCount = a => a.reduce((acc, item) => acc + (Array.isArray(item) ? 1 + deepCount(item) : 1), 0);
+
+// deepCount=a=>a.reduce((a,b)=>++a+(Array.isArray(b)?deepCount(b):0),0); sic! ++a (add 1) at every run;
+// let deepCount = arr => arr.reduce((a,c) => c.map? a + deepCount(c) : a, arr.length) sic! c.map? checks if it's an array (no error);  
+// const deepCount = a => a.reduce((s,e)=>s+(Array.isArray(e)?deepCount(e):0),a.length);
+
+// function deepCount(a){
+//   let count = a.length;
+//   for (let i=0; i<a.length; i++) if (Array.isArray(a[i])) count += deepCount(a[i]);
+//   console.log(a, count);
+//   return count;
+// }
+
+// function deepCount(a) {
+//   return JSON.stringify(a).replace(/[^[,]|\[]/g, '').length;
+// }
+
+// console.log(deepCount([17, [[6, 16, 8]], [[21, 26, 10]]]));
+
+// ========================== Ackermann Function ====================
+
+Ackermann = function(m,n) {
+  if (!Number.isInteger(m) || m < 0 || !Number.isInteger(n) || n < 0) return null;
+  // if (~~m !== m || ~~n !== n || m < 0 || n < 0)
+  if (m === 0) return n + 1;
+  if (m > 0 && n === 0) return Ackermann(m-1,1);
+  if (m > 0 && n > 0) return Ackermann(m-1, Ackermann(m,n-1));
+}
+
+// console.log(Ackermann(1,1));
+
+// ============================= Word Segmentation: MaxMatch =================
+const VALID_WORDS = new Set([ 'the',
+  'good', 'luck', 'this', 'is', 'a', 'japanese', 'doll', 'my', 'good', 'book', 'go', 'a', 'better', 'test', 'i', 'be', 'love', 'bread', 'checked', 'tom', 'make', 'sure', 'that', 'he', 'was', 'still', 'alive' ]);
+
+  const maxMatch = sentence => {
+    aResult = [];
+    while (sentence.length > 0) {
+      const word = loop(sentence, aResult);
+      sentence = sentence.slice(word.length || 1);
+    }
+    return aResult;
+  }
+
+  const loop = (string, arr) => {
+    if (string.length === 1) {
+      arr.push(string);
+      return 0;
+    }
+    if (VALID_WORDS.has(string)) {
+      arr.push(string);
+      return string;
+    }
+    return loop(string.slice(0,-1), arr);
+  }
+
+  // function maxMatch(text) {
+  //   console.log(text);
+  //   for (let i = text.length; i > 0; i--) {
+  //     if (i === 1 || VALID_WORDS.has(text.slice(0, i))) return [ text.slice(0, i) ].concat(maxMatch(text.slice(i)));
+  //   }
+  //   return [];
+  // }
+
+  // function maxMatch(text) {
+  //   for (let i = text.length; i > 0; i--) {
+  //     const chunk = text.slice(0, i);
+  //     if (VALID_WORDS.has(chunk) || i === 1) {
+  //       return [chunk, ...maxMatch(text.slice(i))];
+  //     }
+  //   }
+  //   return [];
+  // }
+
+//   function maxMatch(sentence){
+//     return sentence.match(RegExp([...VALID_WORDS].sort((a,b)=>b.length-a.length).join`|`+'|'+'.', 'g') )||[]
+// }
+
+//   function maxMatch(sentence){
+//     let maxMatchedIndex = 0, matchedWords = [];
+    
+//     for (let i = sentence.length; i >= maxMatchedIndex; i--) {
+//       const slicedWord = sentence.slice(maxMatchedIndex, i);
+//       if (VALID_WORDS.has(slicedWord) || slicedWord.length === 1){
+//         matchedWords.push(slicedWord);
+//         maxMatchedIndex = i;
+//         i = ++sentence.length;
+//       }
+//     }
+//     return matchedWords;
+// }
+
+
+// console.log(maxMatch('gobbledygook'));
+// console.log(maxMatch('icheckedtomakesurethathewasstillalive'));
+// console.log(maxMatch('ilovebread'));
+// console.log(maxMatch('mygoodbook'));
+
+// ==============Sum Up to Target non Adjacent elements ============
+
+// find all combinations wich will give target;
+// pick those that satifsfy condition;
+
+
+const sumUpNoAdjacents = (arr,target) => {
+  // console.log(arr, target);
+  if (target === 0) return true; // target met with non adj condition;
+  if (target < 0) return false; // break condition if target is overshot;
+  if (arr.length === 0) return false; // ran the full length w/o meeting target;
+  return sumUpNoAdjacents(arr.slice(2), target - arr[0]) || sumUpNoAdjacents(arr.slice(1), target);
+}
+
+// console.log(sumUpNoAdjacents([ 18, 13, 24, 12, 9, 28, 26, 24, 15, 18, 21, 25, 12, 29 ],49));
+
+// =================== Fun with tree: max sum =================
+
+var TreeNode = function(value, left, right) {
+  this.value = value;
+  this.left = left;
+  this.right = right;
+};
+
+// var root = null;
+
+var root = new TreeNode(5, new TreeNode(-22, new TreeNode(9), new TreeNode(50)), new TreeNode(11, new TreeNode(9), new TreeNode(2)));
+
+// const maxSum = (root, sum = 0, aSums = []) => {
+//   if (!root) {
+//     aSums.push(sum);
+//     return sum;
+//   }
+//   sum += root.value;
+//   maxSum(root.left, sum, aSums) + maxSum(root.right, sum, aSums);
+//   return aSums.sort((a,b) => b - a)[0];
+// }
+
+// const maxSum = root => !root ? 0 : root.value + Math.max(maxSum(root.left), maxSum(root.right));
+
+// function maxSum(root) {
+//   if (!root) return 0;
+//   return root.value + Math.max(maxSum(root.left), maxSum(root.right))
+// }
+
+// console.log(maxSum(root));
+
+// ================== English beggars ==================
+
+const beggars = (values, n, offers = {}) => {
+  if (n === 0) return [];
+  if (values.length === 0) return offers;
+  for (let b = 1; b <= n; b++) {
+    offers[b] = (offers[b] || 0) + (values[b-1] || 0); // sic!
+  }
+  return Object.values(beggars(values.slice(n), n, offers));
+}
+
+// function beggars(values, n) {
+//   let take = Array(n).fill(0);
+//   for (let i = 0; i < values.length; i++)
+//     take[i % n] += values[i];
+//   return take;
+// }
+
+// function beggars(values, n){
+//   return values.reduce((sum, currentValue, index) => {
+//     sum[index % n] += currentValue;
+//     return sum;
+//   }, Array(n).fill(0));
+// }
+
+// console.log(beggars([1,2,3,4,5], 3));
+
+// ============== Words to Hex ===============
+
+// const wordsToHex = words => {
+//   const RGB = words.split` `.map(word => word.slice(0,3).split``.map(char => char.charCodeAt(0)));
+//   return RGB.map(triplet => '#' + triplet.map(item => item.toString(16)).join('').padEnd(6, '0'));
+// }
+
+// function wordsToHex(words) {
+//   return words.split(' ').map(w =>
+//     '#' + [0, 1, 2].map(i =>
+//       (w.charCodeAt(i) || '00').toString(16)
+//     ).join('')
+//   );
+// }
+
+// const wordsToHex = words => words.match(/(?<=^| )\S{0,3}/g).map(x =>
+//   '#' + [0,1,2].map(i => (x.charCodeAt(i) || '00').toString(16)).join('')
+// )
+
+const wordsToHex = (words) =>
+  words.split(' ').map(w =>
+    '#' + [...w, '', '', ''].slice(0, 3).map(x =>
+      // if x is truthy (a letter) then x.charCode... or '00' is returned; sic!
+      // if x is falthy ('') then '' is returned;
+      x && x.charCodeAt(0).toString(16) || '00'
+    ).join('')
+  );
+
+// console.log(wordsToHex("Hello, my name is Gary and I like cheese."));
+
+// ============= Look and say numbers ============
+
+const lookAndSay = (data, len, result = []) => {
+  if (len < 0) return result.slice(1);
+  result.push(data);
+  return lookAndSay(data.replace(/(1+)|(2+)|(3+)|(4+)|(5+)|(6+)|(7+)|(8+)|(9+)/g, m => m.length+m[0]), len - 1, result);
+}
+
+// function lookAndSay(data,len){
+//   return Array.from(Array(len), () => data = data.replace(/(.)\1*/g, v => v.length + v[0])); // sic! Array.from with map
+// }
+
+// function lookAndSay(data, len){
+//   return Array.from({length:len}, 
+//                     function() {
+//                       return data = data.replace(/(.)\1*/g, 
+//                                                  function(e) {return e.length  + e[0]})});
+// }
+
+// console.log(lookAndSay('1259',5));
+

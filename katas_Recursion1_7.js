@@ -412,11 +412,11 @@ const realSize = arr => {
 // For example:
 // recurrence(1, n => n + 3, 4) === 10
 
-// const recurrence = (base, formula, term, runs = 1) => {
-//   if (term === 1) return base;
-//   if (runs >= term-1) return formula(base);
-//   return recurrence(formula(base), formula, term, runs+1);
-// }
+const recurrence = (base, formula, term, runs = 1) => {
+  if (term === 1) return base;
+  if (runs >= term-1) return formula(base);
+  return recurrence(formula(base), formula, term, runs+1);
+}
 
 // const recurrence = (base, formula, term) => {
 //   if (term === 1) return base;
