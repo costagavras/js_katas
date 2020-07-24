@@ -160,3 +160,5 @@ palindrome=(n,c)=>Array(n).fill('x');
 console.log(palindrome(20,'abcd'));
 // console.log(palindrome(51,'abcdefghijklmnopqrstuvwxyz'));
 // let board = Array(8).fill().map(() => Array(9).fill('*'));
+
+// a.sort(_=>1)

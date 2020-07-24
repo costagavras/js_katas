@@ -29,16 +29,17 @@ const checkWord = (mainBoard, word) => {
         auxBoard[i][col] = '-';
       }
   }
+  console.log(auxBoard);
   console.log(aLocFirst);
-  for (i = 0; i < aLocFirst.length; i++) {
-    console.log(aLocFirst[i]);
-    // console.log(checkLetter(aLocFirst[i], JSON.parse(JSON.stringify(mainBoard)), word.slice(1), [])[0])
-    if (checkLetter(aLocFirst[i], JSON.parse(JSON.stringify(mainBoard)), word.slice(1), [])[0]) return true;
-    // checkResult = checkLetter(aLocFirst[i], JSON.parse(JSON.stringify(mainBoard)), word.slice(1), [], [])[0];
-  }
-  // console.log(checkResult);
-  // if (checkResult) return true;
-  return false;
+  // for (i = 0; i < aLocFirst.length; i++) {
+  //   console.log(aLocFirst[i]);
+  //   // console.log(checkLetter(aLocFirst[i], JSON.parse(JSON.stringify(mainBoard)), word.slice(1), [])[0])
+  //   if (checkLetter(aLocFirst[i], JSON.parse(JSON.stringify(mainBoard)), word.slice(1), [])[0]) return true;
+  //   // checkResult = checkLetter(aLocFirst[i], JSON.parse(JSON.stringify(mainBoard)), word.slice(1), [], [])[0];
+  // }
+  // // console.log(checkResult);
+  // // if (checkResult) return true;
+  // return false;
 }
 
 const checkLetter = (location, board, word, wordResult) => {
