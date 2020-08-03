@@ -635,16 +635,236 @@ function hamming (n) {
   var seq = [1];
   var i2 = 0, i3 = 0, i5 = 0;
   for (var i = 1; i < n; i++) {
+    console.log('=========', i, '================');
+    console.log('seq before: ', seq);
+    console.log('before i2: ', i2, ' i3: ', i3, ' i5: ', i5);
+    console.log('seq[i2]: ', seq[i2], ' seq[i3]: ', seq[i3], ' seq[i5]: ', seq[i5]);
     var x = Math.min(2 * seq[i2], 3 * seq[i3], 5 * seq[i5]);
     seq.push(x);
-    if (2 * seq[i2] <= x) i2++;
-    if (3 * seq[i3] <= x) i3++;
-    if (5 * seq[i5] <= x) i5++;
+    console.log('seq after: ', seq);
+    if (2 * seq[i2] === x) i2++;
+    if (3 * seq[i3] === x) i3++;
+    if (5 * seq[i5] === x) i5++;
+    console.log('after i2: ', i2, ' i3: ', i3, ' i5: ', i5);
   }
   return seq[n-1];
 }
 
 
-console.log(hamming(10));
+// console.log(hamming(8));
 
-// console.log(hammingOld(6));
+// =================== Strip Comments ================
+
+const solution = (input, markers) => {
+  markers.forEach(marker => {
+    input = input.replace(new RegExp('\\s*' + marker + '.*?(?=\\[\\])','g'), '').replace(new RegExp('\\s*\\' + marker + '.*','g'), '');
+  });
+  return input;
+}
+
+// function solution(input, markers){
+//   return input.replace(new RegExp("\\s?[" + markers.join("") + "].*(?=\\[\\])?", "gi"), "");
+// }
+
+// function solution(input, markers) {
+//   return input.split('\n').map(
+//     line => markers.reduce(
+//       (line, marker) => line.split(marker)[0].trim(), line // , line is inivialValue of reduce fonction)
+//     )
+//   ).join('\n')
+// }
+
+
+// console.log(solution("apples, plums % and bananas\npears\noranges !applesauce", ["%", "!"]));
+
+// ================= Longest Common Subsequence (Performance version ==========)
+
+// function lcs(x, y) {
+//   const memo = Array.from({ length: x.length }, _ => Array(y.length));
+//   console.log(memo);
+//   return lcsFunc(x, y, 0, 0, memo);
+// }
+
+// function lcsFunc(x, y, i, j, memo) {
+//   if (i === x.length || j === y.length) {
+//     return '';
+//   } else if (memo[i][j] !== undefined) {
+//     return memo[i][j];
+//   } else if (x[i] === y[j]) {
+//     memo[i][j] = x[i] + lcsFunc(x, y, i + 1, j + 1, memo);
+//     console.log(memo[i][j]);
+//     return memo[i][j];
+//   }
+
+//   const a = lcsFunc(x, y, i + 1, j, memo);
+//   const b = lcsFunc(x, y, i, j + 1, memo);
+//   console.log('a: ', a, 'b: ', b);
+//   memo[i][j] = a.length > b.length ? a : b;
+//   return memo[i][j];
+// }
+
+// function lcs(x, y) {
+//   var longest = function (x, y) { return x.length > y.length ? x : y };
+//   if (!x.length || !y.length) {
+//     return '';
+//   } else if (x[0] == y[0]) {
+//     return x[0] + LCS(x.slice(1), y.slice(1));
+//   } else {
+//     return longest(LCS(x.slice(1), y), LCS(x, y.slice(1)));
+//   }
+// }
+
+const lcs = (x, y) => {
+  let memo = Array(x.length).fill('');      
+  for (let i = 0; i < y.length; i++) {    
+    console.log('i: ', i);
+    let l = '';
+    console.log('y[i]: ', y[i]);
+    memo = memo.map((val, idx) => (l = x[idx] === y[i] ? (memo[idx - 1] || '') + x[idx] : (l.length > val.length ? l : val))); //!sic map function
+    console.log('l: ', l);
+    console.log('memo_after: ', memo);
+    console.log('=================');
+  }
+  return memo.pop() || '';
+}
+
+// const lcs = (s1, s2) => {
+//   let memo = Array(s1.length).fill('');      
+//   for (let i = 0; i < s2.length; i++) {    
+//     let match = '';
+//     memo = memo.map((val, idx) => (match = s1[idx] === s2[i] ? 
+                                      // (memo[idx - 1] || '') + s1[idx] : 
+                                      // (match.length > val.length ? match : val))); //!sic map function
+//   }
+//   return memo[memo.length-1];
+// }
+
+// function lcs(x, y) {
+//   const m = x.length, n = y.length;
+//   let L = [];
+  
+//   for (let i = 0; i <= m; i++) {
+//     L[i] = [];
+//     for (let j = 0; j <= n; j++) {
+//       if (!i || !j) L[i][j] = '', console.log('L1: ', L);
+//       else if (x[i - 1] === y[j - 1])
+//       L[i][j] = L[i - 1][j - 1] + x[i - 1], console.log('L2: ', L);
+//       else {
+//         let a = L[i - 1][j];
+//         let b = L[i][j - 1];
+//         L[i][j] = a.length > b.length ? a : b;
+//         // console.log('L3: ', L);
+//       } 
+//     }
+//   }
+//   return L[m][n];
+// }
+
+// function lcs(x, y) {
+//   let table = ' '.repeat(x.length+1).split('').map(a=>' '.repeat(y.length+1).split(''))                   //create a table based on lengths of x and y. this will hold a grid of the longest sequences and sequence lengths at every combination of character positions of x and y
+//   console.log('table: ', table);
+//   for (let i = 0; i <=x.length; i++) {                                                            
+//       for (let j = 0; j <= y.length; j++) {
+//           if (i == 0 || j == 0) table[i][j] = [0,'']                                                      //populate first row and column with empty string. if we have no characters of x, it doesn't share any with y (and vice versa)
+//           else if (x[i - 1] == y[j - 1]) {                                                                //same char in these positions so ...
+//               table[i][j] = [table[i - 1][j - 1][0] + 1, table[i-1][j-1][1] + x[i-1]]                     //increment the previous longest sequence and add the current char
+//           }
+//           else table[i][j] = table[i-1][j][0]>table[i][j-1][0] ? table[i-1][j] : table[i][j-1]            //different char in these positions so promote the longest sequence from adjacent cells
+//       }
+//   }
+//   return table[x.length][y.length][1]                                                                     //final value is in the last cell of the grid. after we've compared every combination of x,y character positions
+// }
+
+// function lcs(x, y, m = 0, n = 0, cache = {}) {
+//   const cacheKey = m + ':' + n;
+//   if(cache[cacheKey]) {
+//     return cache[cacheKey];
+//   }
+//   let longest = '';
+//   for(let i = m; i < x.length; i++) {
+//     for(let j = n; j < y.length; j++) {
+//       if(x[i] !== y[j]) continue;
+//       const current = x[i] + lcs(x, y, i + 1, j + 1, cache);
+//       if(current.length > longest.length) {
+//         longest = current;
+//       }
+//     }
+//   }
+//   console.log(cache);
+//   cache[cacheKey] = longest;
+//   return longest;
+// }
+
+
+// console.log(lcs("abcdefghijklmnopq", "apcdefghijklmnobq"));
+
+// =============================== Longest Palindromic Substring (Linear) ==========
+
+// non linear O(N2) solution
+const longest_palindrome = ([...s], result = []) => {
+  if (!s.length) return '';
+  if (s.length === 1) return result.pop() || s[0];
+  if (s.every((x,_,arr) => x === arr[0])) return result[s.length] = s.join(''), result.pop();
+  for (let i = 0; i <= s.length; i++) {
+    if (JSON.stringify(s.slice(0, i)) === JSON.stringify(s.slice(0, i).reverse())) {
+      if (!result[s.slice(0,i).length]) {
+        result[s.slice(0,i).length] = s.slice(0, i).join('') ;
+      }
+    } 
+  }
+  console.log(result);
+  return longest_palindrome(s.slice(1), result);
+}
+
+// console.log(longest_palindrome('bbaaacc'));
+// console.log(longest_palindrome('banana'));
+// console.log(longest_palindrome('a'.repeat(10000)), 'a'.repeat(10000)); 
+
+// ============================== Shortest Knight Path =================
+
+const knight = (start, finish) => {
+  // const parsePos = str => ({ x: str.charCodeAt(0)-"a".charCodeAt(0), y: parseInt(str[1], 10)-1 });
+  // console.log(parsePos(start));
+  // console.log(parsePos(finish));
+  const fieldConversion = {'a':1, 'b':2, 'c':3, 'd':4, 'e':5, 'f':6, 'g':7, 'h':8 };
+  const column = [11,21,31,41,51,61,71,81], possibleMoves = [-21, -19, -12, 8, 19, 21, 12, -8]; 
+  let chessField = [];
+  for (let item of column) {
+    for (let i = 0; i <= 7; i++) {
+      chessField.push(item+i);
+    }
+  }
+  let startPos = start[1] + fieldConversion[start[0]];
+  let endPos = finish[1] + fieldConversion[finish[0]];
+  let validMoves = possibleMoves.map(val => val + +startPos).filter(v => chessField.includes(v));
+  let i = 1;
+  while (validMoves.every(v => v !== +endPos)) {
+    validMoves = [...new Set(flatten(validMoves.map(val => possibleMoves.map(v => v + +val).filter(k => chessField.includes(k)))))];
+    i++;
+  }
+  return i;
+}
+
+const flatten = l => l.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
+
+// var MOVES = [[1, -2], [1, 2], [2, -1], [2, 1], [-1, -2], [-1, 2], [-2, 1], [-2, -1]]
+// function knight(p1, p2) {
+//     [p1,p2] = [p1,p2].map(x=>[8- +x[1],'abcdefgh'.indexOf(x[0])]);
+//     console.log([p1, p2]);
+//     let Q = [[p1,-1]], visited = {}
+//     console.log(Q);
+//     while (Q.length){
+//         let [k,l] = Q.shift()
+//         l++
+//         visited[k] = 1
+        
+//         if (k[0]==p2[0]&&k[1]==p2[1]) return l
+        
+//         for (let [i,j] of MOVES){
+//             let [ni,nj] = [k[0]+i,k[1]+j]
+//             if (ni>=0&&nj>=0&&ni<8&&nj<8&&!visited[[ni,nj]]) Q.push([[ni,nj],l])
+//         }
+//     }
+// }
+
+console.log(knight('a1', 'f7'));
