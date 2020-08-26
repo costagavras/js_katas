@@ -822,10 +822,12 @@ const longest_palindrome = ([...s], result = []) => {
 
 // ============================== Shortest Knight Path =================
 
+// return moves.filter(Boolean).filter(a => !a.match(/[-0]/) && a[1]<9)  // sic! regex
+// const parsePos = str => ({ x: str.charCodeAt(0)-"a".charCodeAt(0), y: parseInt(str[1], 10)-1 });
+// console.log(parsePos(start));
+// console.log(parsePos(finish));
+
 const knight = (start, finish) => {
-  // const parsePos = str => ({ x: str.charCodeAt(0)-"a".charCodeAt(0), y: parseInt(str[1], 10)-1 });
-  // console.log(parsePos(start));
-  // console.log(parsePos(finish));
   const fieldConversion = {'a':1, 'b':2, 'c':3, 'd':4, 'e':5, 'f':6, 'g':7, 'h':8 };
   const column = [11,21,31,41,51,61,71,81], possibleMoves = [-21, -19, -12, 8, 19, 21, 12, -8]; 
   let chessField = [];
@@ -867,4 +869,227 @@ const flatten = l => l.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) :
 //     }
 // }
 
-console.log(knight('a1', 'f7'));
+// function knight(start,finish){
+//   let S={x:'abcdefgh'.indexOf(start[0]),y:start[1]-1}
+//   let F={x:'abcdefgh'.indexOf(finish[0]),y:finish[1]-1}
+//   console.log(S, F);
+//   let M= [[1,2],[1,-2],[-1,2],[-1,-2],[2,1],[2,-1],[-2,1],[-2,-1]] 
+//   let queue=[]; queue.push({x:S.x,y:S.y,d:0});
+//   console.log('queue: ', queue);
+//   let seen=[]; seen[8*S.y+S.x]=1
+//   console.log('seen: ', seen);
+//   while(queue.length){
+//       let {x,y,d}=queue.shift();
+//       if(x==F.x && y==F.y) return d;
+//       for(let [x2,y2] of M.map(e=>[x+e[0],y+e[1]])){
+//         console.log([x2, y2]);
+//           if(x2>=0 && x2<8 && y2>=0 && y2<8 && !seen[[x2,y2]]){
+//               queue.push({x:x2,y:y2,d:d+1})
+//               seen[8*S.y+S.x]=1
+//               console.log('queue2: ', queue);
+//               console.log('seen2: ', seen);
+//           }
+//       }
+//   }
+// }
+
+// console.log(knight('a1', 'c1'));
+
+// ========================= Repetitive Sequence - Easy Version (NS) ===================
+ 
+function find(n) {
+  let seq = [0,1,2,2];
+  if (n <= 2) return seq[n];
+  for (let i = 3, k = 3; i <= n; i++, k+=2) {
+    let aTemp = Array.from({length: seq[i]}).fill(i);
+    seq = seq.concat(aTemp);
+  }
+  return seq[n];
+}
+
+// console.log(find(19));
+
+// test = Array.from({length: 6}).fill().map(()=>Array.from({length: 7}).fill('_'))
+// test = Array.from({ length: 6 }, () => Array(7).fill('_'));
+
+
+// ============================ Path Finder #1: can you reach the exit ==================
+
+// function pathFinder(maze) {
+//   const mazeArray = maze.split('\n').map(it => [...it.trim()]);
+//   const mazeWidth = mazeArray[0].length;
+//   const mazeLength = mazeArray.length;
+//   mazeArray[mazeLength-1][mazeWidth-1] = 'F';
+//   // console.log(mazeArray);
+
+//   const walkMaze = (r, c, visited = new Set) => {
+//     const pos = r*mazeWidth+c; // unique reference to cell;
+//     if (!mazeArray[r] || !mazeArray[c] || mazeArray[r][c] === 'W' || visited.has(pos)) return; // check cell is within grid and has not been visited nor is a wall;
+//     visited.add(pos); // marks cell as visited;
+//     console.log('visiting: ', r, c);
+//     if (mazeArray[r][c] === 'F') return [[r, c]]; // 'Finish" cell is found, I return the path that will be extended back to beginning [8,8] then [7,7][8,8] etc.
+//     for (const [addR, addC] of [[0,1],[1,0],[0,-1],[-1,0]]) {
+//       const arrived = walkMaze(r+addR, c+addC, visited); // arrived to this point only if previous returns are not met;
+//       console.log('arrived: ', arrived)
+//       if (arrived) return [[r, c], ...arrived]; // arrives here only if arrived is defined, i.e. becomes an array having found Finish);
+//     }
+//   }
+  
+//   return walkMaze(0, 0) ? true : false;
+// }
+
+// ==== wrong solution =====
+
+// let arrPath = mazeArray.map((el,elIdx) => el.map((it,idx) => it === '.' ? elIdx+':'+idx : 0 ).filter(Boolean)).reduce((acc,val) => acc.concat(val),[]);
+  // let result = [];
+  
+  // const walkMaze = (path, visited, result) => {
+  // const walkMaze = (path, result) => {
+  //   console.log('path: ', path);
+  //   if (result.length === 1 || !path.length) return;
+  //   if (result.length === 1) return;
+  //   visited.push(path[0]);
+  //   let possibleBranches = findTree(path[0]); // +/- locations around path[0]
+  //   console.log('possibleBranches: ', possibleBranches);
+  //   let actualBranches = possibleBranches.filter(br => path.includes(br));
+  //   console.log('actualBranches: ', actualBranches);
+  //   if (!actualBranches) return;
+  //   console.log('answer: ', actualBranches.some(br => (checkAddress(br)))); // check if any of the actual branches is the Finish;
+  //   if (actualBranches.some(br => checkAddress(br))) return result.push(true);
+  //   return actualBranches.forEach(br => walkMaze(path.slice(path.findIndex(it => it === br)), result));
+  //   // return actualBranches.forEach(br => walkMaze(path.filter(p => !visited.includes(p)), visited, result));
+  // }
+
+// const checkAddress = address => {
+//   const [r,c] = address.split(':').map(n=> +n);
+//   return mazeArray[r][c] === '.' ? false : true;
+// }
+
+// const findTree = item => {
+//   const [r,c] = item.split(':').map(n=> +n);
+//   return [`${r-1}:${c}`, `${r}:${c-1}`, `${r}:${c+1}`,`${r+1}:${c}`]
+// }
+
+// === wrong solution end =======
+
+// function pathFinder(maze){
+//   maze = maze.split('\n').map(r=>[...r.trim()]);
+//   var len=maze.length, stack = [[0,0]];
+//   while(stack.length) {
+//     let [x,y] = stack.pop(); // takes the last one;
+//     if(maze[y][x] !== '.') continue; // continue loop (skip code) if 'W';
+//     maze[y][x]='X';
+//     console.log(maze, 'stack before: ', stack, 'working on: ', [y, x]);
+//     [[x,y-1],[x,y+1],[x-1,y],[x+1,y]].filter(([i,j])=>i>=0&&j>=0&&i<len&&j<len).forEach(([i,j])=>stack.push([i,j]));
+//     console.log('stack after: ', stack);
+//   }
+//   return maze[len-1][len-1]==='X';
+// }
+
+// --------------------------
+
+// function pathFinder(maze){
+//   const rows = maze.split(`\n`).map(l => l.split(``));
+//   const n = rows.length - 1;
+//   const moveTo = (x, y) => {
+//     if (x < 0 || y < 0 || x > n || y > n || rows[y][x] !== '.') return false;
+//     if (x === n && y === n) return true;
+//     rows[y][x] = `x`;
+//     return moveTo(x - 1, y) || moveTo(x + 1, y) || moveTo(x, y - 1) || moveTo(x, y + 1);
+//   }
+  
+//   return moveTo(0, 0);
+// }
+
+// -----------------------
+
+// function pathFinder(m){
+//   m = m.split('\n').map(r=>r.split(''))
+//   let n = m.length-1;
+//   (function DFS(m,r,c) {
+//     m[r][c] = 'x';
+//     console.log(m);
+//     for(let d of [[1,0],[-1,0],[0,1],[0,-1]]) {
+//       let R = r + d[0], C = c + d[1];
+//       console.log('R: ', R, 'C: ', C);
+//       if (m[R] && m[R][C] === '.')
+//         DFS(m,R,C);
+//     }
+//   }(m,0,0));
+//   return m[n][n] === 'x'
+// }
+
+
+// -------------------------
+// function checkStep (maze, x, y) {
+//   if(x == maze.length - 1 && y == maze.length - 1) return true;
+//   if(x > maze.length - 1 ||
+//      y > maze.length - 1 || 
+//      x < 0 || 
+//      y < 0 || 
+//      maze[x][y] == 'W') return false;
+     
+//   maze[x][y] = 'W';
+//   if(checkStep(maze, x+1, y)) return true;
+//   if(checkStep(maze, x, y+1)) return true;
+//   if(checkStep(maze, x-1, y)) return true;
+//   if(checkStep(maze, x, y-1)) return true;
+  
+//   return false;
+// }
+
+// function pathFinder(maze){
+//   maze = maze.split('\n').map(function(e){return e.split('')});
+//   if(checkStep(maze, 0, 0)) return true;
+//   else return false;
+// }
+// -------------------------
+
+
+// ======================= Path Finder #2: shortest  path ==============
+
+function pathFinder(maze) {
+  const mazeArray = maze.split('\n').map(it => [...it]);
+  const mazeSize = mazeArray[0].length;
+  mazeArray[mazeSize-1][mazeSize-1] = 'F';
+  
+  const walkMaze = (option, r, c, visited = new Set) => {
+    const pos = r*mazeSize+c; // unique reference to cell;
+    if (!mazeArray[r] || !mazeArray[c] || mazeArray[r][c] === 'W' || visited.has(pos)) return; // check cell is within grid and has not been visited nor is a wall;
+    visited.add(pos); // marks cell as visited;
+    // console.log('visiting: ', r, c);
+    if (mazeArray[r][c] === 'F') return [[r, c]]; // 'Finish" cell is found, I return the path that will be extended back to beginning [8,8] then [7,7][8,8] etc.
+    if (option === 1) {
+      for (const [addR, addC] of [[1,0],[0,1],[-1,0],[0,-1]]) {
+        const arrived = walkMaze(option, r+addR, c+addC, visited); // arrived to this point only if previous returns are not met;
+        if (arrived) mazeArray[r][c] = 'x';
+        console.log(mazeArray);
+        // console.log('arrived: ', arrived)
+        if (arrived) return [[r, c], ...arrived]; // arrives here only if arrived is defined, i.e. becomes an array having found Finish);
+      }
+    }
+    if (option === 2) {
+      for (const [addR, addC] of [[0,1],[1,0],[-1,0],[0,-1]]) {
+        const arrived = walkMaze(option, r+addR, c+addC, visited); // arrived to this point only if previous returns are not met;
+        if (arrived) mazeArray[r][c] = 'x';
+        console.log(mazeArray);
+        if (arrived) return [[r, c], ...arrived]; // arrives here only if arrived is defined, i.e. becomes an array having found Finish);
+      }
+    }
+  }
+  
+  const result1 = walkMaze(1, 0, 0);
+  // console.log(result1.length - 1);
+  const result2 = walkMaze(2, 0, 0);
+  // console.log(result2.length - 1);
+  return result1 || result2 ? Math.min(result1.length - 1, result2.length -1) : false;
+}
+
+  // console.log(pathFinder(
+// `..W...W
+// ....W.W
+// ..W..W.
+// .......
+// ...WW..
+// ..WWW.W
+// .W.W...`));

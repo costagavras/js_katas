@@ -21,35 +21,115 @@ const ELEMENTS =  { H: 'Hydrogen', He: 'Helium', Li: 'Lithium', Be: 'Beryllium',
                     Es: 'Einsteinium', Fm: 'Fermium', Md: 'Mendelevium', No: 'Nobelium', Lr: 'Lawrencium' }
 
 
-const elementalForms = word => {
-  if (!word) return [];
-  const allCombosLetters = combos3(word, [], []);
-  // console.log(allCombosLetters);
-  // const allCombosElements = allCombosLetters.map(combo => combo.map(letter => `${ELEMENTS[capitalize(letter)]} (${capitalize(letter)})`));
-  return allCombosLetters.map(combo => combo.map(letter => `${ELEMENTS[capitalize(letter)]} (${capitalize(letter)})`));
-  // return allCombosElements.filter(it => it.every(combo => !combo.includes('undefined')));
-}
+// const elementalForms = word => {
+//   let allCombosLetters;
+//   if (!word) return [];
+//   if (word.includes('Uut') || word.includes('Uup') || word.includes('Uus') || word.includes('Uuo')) {
+//     allCombosLetters = combos3(word, [], []);
+//   } else {
+//     allCombosLetters = combos2(word, [], []);
+//   }
+//   return allCombosLetters.map(combo => combo.map(letter => `${ELEMENTS[capitalize(letter)]} (${capitalize(letter)})`));
+// }
 
-const capitalize = str => str[0].toUpperCase() + str.slice(1).toLowerCase();
+// const capitalize = str => str[0].toUpperCase() + str.slice(1).toLowerCase();
 
-const combos3 = (right, left, result) => {
-  console.log('right: ', right, 'left: ', left, 'result: ', result);
-  if (right.length > 0 && right.length <= 3) {
-    console.log('right: ', right);
-    result.push(left.concat(right));
-    if (!result[result.length-1].every(letter => ELEMENTS[capitalize(letter)])) result.pop();
-  }
-  if (right.length > 1){
-    for(let i = 1; i <= 3; i++){
-      combos3(right.slice(i), left.concat(right.slice(0, i)), result);
-    }
-  }
-  return result;
-};
+// const combos3 = (right, left, result) => {
+//   if (right.length > 0 && right.length <= 3) {
+//     result.push(left.concat(right));
+//     if (!result[result.length-1].every(letter => ELEMENTS[capitalize(letter)])) result.pop();
+//   }
+//   if (right.length > 1){
+//     for(let i = 1; i <= 3; i++){
+//       combos3(right.slice(i), left.concat(right.slice(0, i)), result);
+//     }
+//   }
+//   return result;
+// };
+
+// const combos2 = (right, left, result) => {
+//   if (right.length > 0 && right.length <= 2) {
+//     result.push(left.concat(right));
+//     if (!result[result.length-1].every(letter => ELEMENTS[capitalize(letter)])) result.pop();
+//   }
+//   if (right.length > 1){
+//     for(let i = 1; i <= 2; i++){
+//       combos2(right.slice(i), left.concat(right.slice(0, i)), result);
+//     }
+//   }
+//   return result;
+// };
+
+// function elementalForms(word) {
+//   return word == '' ? [] : [1,2,3].filter(len=>len<=word.length).reduce((res, len) => {
+//     console.log('res: ', res, 'len: ', len);
+//     var el = word[0].toUpperCase()+word.slice(1,len).toLowerCase(), name = ELEMENTS[el];
+//     return res.concat(name ? (len<word.length ? elementalForms(word.slice(len)) : [[]]).map(arr => [`${name} (${el})`].concat(arr)) : []);
+//   }, []);
+// }
+
+// function elementalForms(word) {
+//   function search(word) {
+//     if (!word) return [[]];
+//     const forms = [];
+//     const a = word[0].toUpperCase();
+//     const b = (word[1] || '0').toLowerCase();
+//     const c = (word[2] || '0').toLowerCase();
+//     for (const element of [a, a + b, a + b + c]) {
+//       if (element in ELEMENTS) {
+//         console.log('element: ', element);
+//         const ws = search(word.slice(element.length));
+//         console.log('ws: ', ws);
+//         ws.map(x => console.log('x: ', x));
+//         // forms.push(...ws.map(x => [`${ELEMENTS[element]} (${element})`, ...x]))
+//         forms.push(...ws.map(x => [`${ELEMENTS[element]} (${element})`].concat(x))); !sic array push with map;
+//         console.log('forms: ', forms);
+//       }
+//     }
+//     return forms;
+//   }
+//   return word ? search(word) : [];
+// }
+
+// function elementalForms(s, words=[], found=[]) {
+//   console.log('words: ', words);
+//   if (!s) found.push(words.slice().map(x=>ELEMENTS[x]+' ('+x+')'));
+//   console.log('found: ', found);
+//   let matched = Object.keys(ELEMENTS).filter(x=>s.toLowerCase().startsWith(x.toLowerCase()));
+//   console.log('matched: ', matched);
+//   for (let i of matched){
+//       words.push(i)
+//       elementalForms(s.slice(i.length),words,found)
+//       words.pop()
+//   }
+//   return s ? found :[];
+// }
+
+// function elementalForms(word) {
+//   var el=Object.keys(ELEMENTS);
+  
+//   function search(str) {
+//     if(str) {
+//       var res=[];
+//       var beg=el.filter(e=>e.toLowerCase()==str.slice(0,e.length));
+//       beg.forEach(function(e) {
+//         var rest=search(str.slice(e.length));
+//         if(rest.length) res=res.concat(rest.map(v=>[e,...v]))
+//       });
+//       return res;
+//     }
+//     else return [[]];
+//   }
+  
+//   return search(word.toLowerCase()).filter(e=>e.length).map(w=>w.map(e=>ELEMENTS[e]+' ('+e+')'));
+// }
+
+// String.prototype.capitalize = function() { // sic! property created
+//   return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+// }
 
 // console.log(elementalForms('snack'));
-// console.log(elementalForms('casinos'));
-// console.log(elementalForms('floccinaucinihilipilification'));
+// console.log(elementalForms('UuoHoNoSbSi'));
 
 // ========================== Find all possible numbers to sum a number =================
 
@@ -406,6 +486,6 @@ const checkWord = (board, word) => {
   return board.some((b, i) => b.some((_, j) => recur(i,j,0,[])))
 }
 
-console.log(checkWord(testBoard,'PARAPARAS'));
+// console.log(checkWord(testBoard,'PARAPARAS'));
 // console.log(checkWord(testBoard,'ANIMALITY'));
 
